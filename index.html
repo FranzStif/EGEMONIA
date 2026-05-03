@@ -10,392 +10,335 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --bg: #F9F6F0; --bg2: #F0EBE1; --bg3: #E8E0D0;
-      --text: #1C1008; --text2: #6B5B45; --text3: #9E8870;
-      --border: #D4C4A8; --border2: #C4B090;
-      --accent: #B45309; --accent2: #92400E;
-      --radius: 10px; --radius-sm: 6px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Crimson Text', Georgia, serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-    /* ── Header ── */
-    .hdr { background: var(--text); padding: 0 1.5rem; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 12px rgba(0,0,0,.3); }
-    .hdr-inner { display: flex; align-items: stretch; gap: 0; }
-    .hdr-brand { display: flex; align-items: center; gap: 10px; padding: 0 1.5rem 0 0; border-right: 1px solid #ffffff18; margin-right: 1rem; }
-    .hdr-title { font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700; color: #F59E0B; letter-spacing: .08em; }
-    .hdr-sub { font-size: 11px; color: #9E8870; font-family: sans-serif; }
-    .tab { padding: 0 16px; height: 56px; display: flex; align-items: center; font-family: 'Cinzel', serif; font-size: 12px; font-weight: 600; letter-spacing: .06em; border: none; background: none; cursor: pointer; color: #9E8870; border-bottom: 3px solid transparent; transition: all .15s; white-space: nowrap; }
-    .tab:hover { color: #F59E0B; }
-    .tab.active { color: #F59E0B; border-bottom-color: #F59E0B; }
-    .content { padding: 1.5rem; max-width: 1200px; margin: 0 auto; }
-
-    /* ── Cards ── */
-    .card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; }
-    .card-amber { background: #FFFBF2; border: 1px solid #F59E0B55; border-radius: var(--radius); padding: 1rem 1.25rem; }
-    .grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
-
-    /* ── Buttons ── */
-    .btn { padding: 6px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: white; cursor: pointer; font-size: 12px; font-family: sans-serif; color: var(--text); transition: all .12s; }
-    .btn:hover { background: var(--bg2); border-color: var(--border2); }
-    .btn-primary { background: var(--accent); border-color: var(--accent); color: white; }
-    .btn-primary:hover { background: var(--accent2); }
-    .btn-danger { color: #DC2626; border-color: #DC262644; }
-    .btn-danger:hover { background: #FEE2E2; }
-
-    /* ── Inputs ── */
-    .input { width: 100%; padding: 6px 9px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: white; color: var(--text); font-size: 13px; font-family: sans-serif; }
-    .input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px #B4530918; }
-    textarea.input { resize: vertical; min-height: 72px; }
-    .select { width: 100%; padding: 6px 9px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: white; color: var(--text); font-size: 13px; font-family: sans-serif; cursor: pointer; }
-    .select:focus { outline: none; border-color: var(--accent); }
-    .label { font-size: 11px; font-family: sans-serif; color: var(--text2); margin-bottom: 3px; display: block; }
-
-    /* ── Badges ── */
-    .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-family: sans-serif; }
-    .badge-amber { background: #FEF3C7; color: #92400E; }
-    .badge-teal { background: #CCFBF1; color: #134E4A; }
-    .badge-gray { background: var(--bg2); color: var(--text2); }
-    .badge-red { background: #FEE2E2; color: #7F1D1D; }
-    .badge-green { background: #D1FAE5; color: #064E3B; }
-    .tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 99px; background: var(--bg2); color: var(--text2); margin: 2px; font-family: sans-serif; }
-
-    /* ── Section labels ── */
-    .section-lbl { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 700; letter-spacing: .1em; color: var(--accent); text-transform: uppercase; margin-bottom: 6px; }
-    .divider { border: none; border-top: 1px solid var(--border); margin: .75rem 0; }
-
-    /* ── HP bar ── */
-    .hp-bar { height: 5px; border-radius: 99px; background: var(--bg3); overflow: hidden; margin: 3px 0; }
-    .hp-fill { height: 100%; border-radius: 99px; transition: width .3s; }
-
-    /* ── Skill / Prof dots ── */
-    .skill-row { display: flex; align-items: center; gap: 6px; padding: 2px 0; font-size: 12px; font-family: sans-serif; }
-    .skill-val { font-weight: 600; width: 26px; text-align: right; color: var(--accent); font-size: 12px; }
-    .prof-dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--border2); cursor: pointer; flex-shrink: 0; transition: all .12s; background: transparent; }
-    .prof-dot.prof { background: var(--accent); border-color: var(--accent); }
-    .prof-dot.exp { background: #1D9E75; border-color: #1D9E75; }
-    .death-dot { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--border); cursor: pointer; flex-shrink: 0; transition: all .12s; }
-    .death-dot.suc { background: #16A34A; border-color: #16A34A; }
-    .death-dot.fail { background: #DC2626; border-color: #DC2626; }
-    .insp-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; background: transparent; transition: all .15s; }
-    .insp-btn.on { background: #FEF3C7; border-color: var(--accent); }
-
-    /* ── Coins ── */
-    .coin-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-    .coin-box { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-    .coin-lbl { font-size: 10px; font-family: sans-serif; font-weight: 700; }
-
-    /* ── Modal ── */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 1rem; }
-    .modal { background: white; border-radius: var(--radius); border: 1px solid var(--border); padding: 1.5rem; max-width: 700px; width: 100%; max-height: 92vh; overflow-y: auto; }
-    .modal-title { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 700; color: var(--accent); margin-bottom: 1rem; }
-
-    /* ── Inner tabs (sheet) ── */
-    .tabs-inner { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 1rem; overflow-x: auto; }
-    .tab-inner { padding: 7px 13px; font-size: 12px; font-family: sans-serif; border: none; background: none; cursor: pointer; color: var(--text2); border-bottom: 2px solid transparent; white-space: nowrap; }
-    .tab-inner.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-    /* ── Timeline ── */
-    .timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); margin-top: 4px; flex-shrink: 0; }
-
-    /* ── Map ── */
-    .map-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg2); border: 2px dashed var(--border2); border-radius: var(--radius); min-height: 320px; gap: 1rem; padding: 2rem; text-align: center; }
-
-    /* ── Empty state ── */
-    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text2); font-family: sans-serif; }
-
-    /* ── Import/Export bar ── */
-    .data-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 1rem; font-size: 12px; font-family: sans-serif; color: var(--text2); }
-
-    /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg2); }
-    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+    :root{--bg:#F9F6F0;--bg2:#F0EBE1;--bg3:#E8E0D0;--text:#1C1008;--text2:#6B5B45;--text3:#9E8870;--border:#D4C4A8;--border2:#C4B090;--accent:#B45309;--accent2:#92400E;--radius:10px;--radius-sm:6px;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Crimson Text',Georgia,serif;background:var(--bg);color:var(--text);min-height:100vh;}
+    .hdr{background:var(--text);padding:0 1.5rem;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+    .hdr-inner{display:flex;align-items:stretch;overflow-x:auto;}
+    .hdr-brand{display:flex;align-items:center;padding:0 1.5rem 0 0;border-right:1px solid #ffffff18;margin-right:1rem;flex-shrink:0;}
+    .hdr-title{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:#F59E0B;letter-spacing:.08em;}
+    .hdr-sub{font-size:11px;color:#9E8870;font-family:sans-serif;}
+    .hdr-role{display:flex;align-items:center;gap:8px;margin-left:auto;padding-left:1rem;flex-shrink:0;}
+    .tab{padding:0 16px;height:56px;display:flex;align-items:center;font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:.06em;border:none;background:none;cursor:pointer;color:#9E8870;border-bottom:3px solid transparent;transition:all .15s;white-space:nowrap;}
+    .tab:hover{color:#F59E0B;} .tab.active{color:#F59E0B;border-bottom-color:#F59E0B;}
+    .content{padding:1.5rem;max-width:1200px;margin:0 auto;}
+    .card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;}
+    .card-amber{background:#FFFBF2;border:1px solid #F59E0B55;border-radius:var(--radius);padding:1rem 1.25rem;}
+    .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;}
+    .btn{padding:6px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;cursor:pointer;font-size:12px;font-family:sans-serif;color:var(--text);transition:all .12s;}
+    .btn:hover{background:var(--bg2);border-color:var(--border2);}
+    .btn-primary{background:var(--accent);border-color:var(--accent);color:white;}
+    .btn-primary:hover{background:var(--accent2);}
+    .btn-danger{color:#DC2626;border-color:#DC262644;}
+    .btn-danger:hover{background:#FEE2E2;}
+    .btn-ghost{background:transparent;border-color:transparent;color:#9E8870;}
+    .btn-ghost:hover{background:#ffffff18;border-color:transparent;color:white;}
+    .input{width:100%;padding:6px 9px;border:1px solid var(--border);border-radius:var(--radius-sm);background:white;color:var(--text);font-size:13px;font-family:sans-serif;}
+    .input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px #B4530918;}
+    .input:disabled{background:var(--bg2);color:var(--text2);cursor:default;}
+    textarea.input{resize:vertical;min-height:72px;}
+    .select{width:100%;padding:6px 9px;border:1px solid var(--border);border-radius:var(--radius-sm);background:white;color:var(--text);font-size:13px;font-family:sans-serif;cursor:pointer;}
+    .select:focus{outline:none;border-color:var(--accent);}
+    .select:disabled{background:var(--bg2);color:var(--text2);cursor:default;}
+    .label{font-size:11px;font-family:sans-serif;color:var(--text2);margin-bottom:3px;display:block;}
+    .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;font-family:sans-serif;}
+    .badge-amber{background:#FEF3C7;color:#92400E;}
+    .badge-teal{background:#CCFBF1;color:#134E4A;}
+    .badge-gray{background:var(--bg2);color:var(--text2);}
+    .badge-red{background:#FEE2E2;color:#7F1D1D;}
+    .badge-master{background:#1C1008;color:#F59E0B;}
+    .badge-player{background:#D1FAE5;color:#064E3B;}
+    .tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;background:var(--bg2);color:var(--text2);margin:2px;font-family:sans-serif;}
+    .section-lbl{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--accent);text-transform:uppercase;margin-bottom:6px;}
+    .divider{border:none;border-top:1px solid var(--border);margin:.75rem 0;}
+    .hp-bar{height:5px;border-radius:99px;background:var(--bg3);overflow:hidden;margin:3px 0;}
+    .hp-fill{height:100%;border-radius:99px;transition:width .3s;}
+    .skill-row{display:flex;align-items:center;gap:6px;padding:2px 0;font-size:12px;font-family:sans-serif;}
+    .skill-val{font-weight:600;width:26px;text-align:right;color:var(--accent);font-size:12px;}
+    .prof-dot{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--border2);cursor:pointer;flex-shrink:0;transition:all .12s;background:transparent;}
+    .prof-dot.prof{background:var(--accent);border-color:var(--accent);}
+    .prof-dot.exp{background:#1D9E75;border-color:#1D9E75;}
+    .prof-dot.ro{cursor:default;}
+    .death-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--border);cursor:pointer;flex-shrink:0;}
+    .death-dot.suc{background:#16A34A;border-color:#16A34A;}
+    .death-dot.fail{background:#DC2626;border-color:#DC2626;}
+    .insp-btn{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;background:transparent;transition:all .15s;}
+    .insp-btn.on{background:#FEF3C7;border-color:var(--accent);}
+    .coin-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+    .coin-box{display:flex;flex-direction:column;align-items:center;gap:3px;}
+    .coin-lbl{font-size:10px;font-family:sans-serif;font-weight:700;}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:200;padding:1rem;}
+    .modal{background:white;border-radius:var(--radius);border:1px solid var(--border);padding:1.5rem;max-width:700px;width:100%;max-height:92vh;overflow-y:auto;}
+    .modal-title{font-family:'Cinzel',serif;font-size:17px;font-weight:700;color:var(--accent);margin-bottom:1rem;}
+    .tabs-inner{display:flex;border-bottom:1px solid var(--border);margin-bottom:1rem;overflow-x:auto;}
+    .tab-inner{padding:7px 13px;font-size:12px;font-family:sans-serif;border:none;background:none;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;white-space:nowrap;}
+    .tab-inner.active{color:var(--accent);border-bottom-color:var(--accent);}
+    .timeline-dot{width:12px;height:12px;border-radius:50%;background:var(--accent);margin-top:4px;flex-shrink:0;}
+    .map-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg2);border:2px dashed var(--border2);border-radius:var(--radius);min-height:320px;gap:1rem;padding:2rem;text-align:center;}
+    .empty-state{text-align:center;padding:3rem 1rem;color:var(--text2);font-family:sans-serif;}
+    .data-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:1rem;font-size:12px;font-family:sans-serif;color:var(--text2);}
+    .ro-banner{background:#FEF3C7;border:1px solid #F59E0B55;border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:1rem;font-size:12px;font-family:sans-serif;color:#92400E;}
+    /* Login */
+    .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;background:var(--text);}
+    .login-box{background:white;border-radius:var(--radius);padding:2.5rem;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+    .login-title{font-family:'Cinzel',serif;font-size:28px;font-weight:700;color:var(--accent);letter-spacing:.1em;margin-bottom:.25rem;}
+    .login-sub{font-size:14px;color:var(--text2);font-family:sans-serif;margin-bottom:2rem;}
+    .login-choice{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+    .login-card{border:2px solid var(--border);border-radius:var(--radius);padding:1.25rem;cursor:pointer;transition:all .15s;text-align:center;}
+    .login-card:hover{border-color:var(--accent);background:var(--bg);}
+    .login-card.sel{border-color:var(--accent);background:#FEF3C7;}
+    .login-icon{font-size:32px;margin-bottom:8px;}
+    .login-card-title{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+    .login-card-desc{font-size:11px;color:var(--text2);font-family:sans-serif;}
+    .err{color:#DC2626;font-size:12px;font-family:sans-serif;margin-top:6px;}
+    ::-webkit-scrollbar{width:6px;height:6px;}
+    ::-webkit-scrollbar-track{background:var(--bg2);}
+    ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
   </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const { useState, useEffect, useRef } = React;
+const { useState, useRef } = React;
 
-// ── Constants ────────────────────────────────────────────────────────────────
-const CAMPAIGN = "Egemonia";
+// ╔══════════════════════════════════════════════╗
+// ║  CONFIGURAZIONE — cambia la password master  ║
+const MASTER_PASSWORD = "egemonia2026";
+// ╚══════════════════════════════════════════════╝
+
 const ABILITY_KEYS = ["FOR","DES","COS","INT","SAG","CAR"];
-const ABILITY_FULL = { FOR:"Forza", DES:"Destrezza", COS:"Costituzione", INT:"Intelligenza", SAG:"Saggezza", CAR:"Carisma" };
+const ABILITY_FULL = {FOR:"Forza",DES:"Destrezza",COS:"Costituzione",INT:"Intelligenza",SAG:"Saggezza",CAR:"Carisma"};
 const SKILLS = [
-  {name:"Acrobazia",ability:"DES"},{name:"Addestrare Animali",ability:"SAG"},
-  {name:"Arcano",ability:"INT"},{name:"Atletica",ability:"FOR"},
-  {name:"Furtività",ability:"DES"},{name:"Historia",ability:"INT"},
-  {name:"Inganno",ability:"CAR"},{name:"Indagare",ability:"INT"},
-  {name:"Intimidazione",ability:"CAR"},{name:"Intuizione",ability:"SAG"},
-  {name:"Medicina",ability:"SAG"},{name:"Natura",ability:"INT"},
-  {name:"Percezione",ability:"SAG"},{name:"Persuasione",ability:"CAR"},
-  {name:"Prestidigitazione",ability:"DES"},{name:"Religione",ability:"INT"},
-  {name:"Rappresentazione",ability:"CAR"},{name:"Sopravvivenza",ability:"SAG"},
+  {name:"Acrobazia",ab:"DES"},{name:"Addestrare Animali",ab:"SAG"},{name:"Arcano",ab:"INT"},
+  {name:"Atletica",ab:"FOR"},{name:"Furtività",ab:"DES"},{name:"Historia",ab:"INT"},
+  {name:"Inganno",ab:"CAR"},{name:"Indagare",ab:"INT"},{name:"Intimidazione",ab:"CAR"},
+  {name:"Intuizione",ab:"SAG"},{name:"Medicina",ab:"SAG"},{name:"Natura",ab:"INT"},
+  {name:"Percezione",ab:"SAG"},{name:"Persuasione",ab:"CAR"},{name:"Prestidigitazione",ab:"DES"},
+  {name:"Religione",ab:"INT"},{name:"Rappresentazione",ab:"CAR"},{name:"Sopravvivenza",ab:"SAG"},
 ];
 const CLASSI = ["Barbaro","Bardo","Chierico","Druido","Guerriero","Ladro","Mago","Monaco","Paladino","Ranger","Stregone","Warlock"];
 const SPECIES = ["Aasimar","Dragonide","Elfo","Gnomo","Goliath","Halfling","Nano","Orco","Tiefling","Umano"];
 const BACKGROUNDS = ["Accolito","Artigiano","Contadino","Criminale","Eremita","Guida","Intrattenitore","Marinaio","Mercante","Nobile","Saggio","Scriba","Soldato","Vagabondo","Vigilante"];
 const ALLINEAMENTI = ["Legale Buono","Neutrale Buono","Caotico Buono","Legale Neutrale","Neutrale","Caotico Neutrale","Legale Malvagio","Neutrale Malvagio","Caotico Malvagio"];
 const LORE_CATS = ["Luoghi","Fazioni","Personaggi","Storia","Magia","Creature","Oggetti"];
-const CAT_BADGE = { Luoghi:"badge-teal",Fazioni:"badge-amber",Personaggi:"badge-gray",Storia:"badge-gray",Magia:"badge-amber",Creature:"badge-red",Oggetti:"badge-teal" };
+const CAT_BADGE = {Luoghi:"badge-teal",Fazioni:"badge-amber",Personaggi:"badge-gray",Storia:"badge-gray",Magia:"badge-amber",Creature:"badge-red",Oggetti:"badge-teal"};
 
-const pb = lvl => 2 + Math.floor((lvl - 1) / 4);
-const mod = v => Math.floor((v - 10) / 2);
-const modStr = v => { const m = mod(v); return (m >= 0 ? "+" : "") + m; };
-const skillBonus = (val, prof, exp, pbv) => {
-  const b = exp ? pbv*2 : prof ? pbv : 0;
-  const m = mod(val) + b;
-  return (m >= 0 ? "+" : "") + m;
+const pbv = lvl => 2 + Math.floor((lvl-1)/4);
+const mod = v => Math.floor((v-10)/2);
+const modStr = v => { const m=mod(v); return (m>=0?"+":"")+m; };
+const skBonus = (val,prof,exp,pb) => { const b=exp?pb*2:prof?pb:0; const m=mod(val)+b; return (m>=0?"+":"")+m; };
+
+const blankPG = () => ({
+  id: Date.now()+Math.random(),
+  nome:"",classe:"Guerriero",sottoClasse:"",species:"Umano",background:"Soldato",allineamento:"Neutrale",
+  livello:1,giocatore:"",master:"",hp:10,hpMax:10,hpTemp:0,ca:10,iniziativa:0,velocita:9,
+  stats:{FOR:10,DES:10,COS:10,INT:10,SAG:10,CAR:10},
+  savingProf:{FOR:false,DES:false,COS:false,INT:false,SAG:false,CAR:false},
+  skillProf:{},monete:{rame:0,argento:0,elettro:0,oro:0,platino:0},
+  heroicInspiration:false,deathSaves:{success:0,fail:0},
+  traits:"",ideals:"",bonds:"",flaws:"",features:"",attacks:"",equipment:"",
+  spellcastingAbility:"",spellSlots:{1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0},spells:"",note:"",
+});
+
+const LS = {
+  get:(k,d)=>{ try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;} },
+  set:(k,v)=>{ try{localStorage.setItem(k,JSON.stringify(v));}catch{} },
 };
 
-function blankPG() {
-  return {
-    id: Date.now() + Math.random(),
-    nome:"", classe:"Guerriero", sottoClasse:"", species:"Umano",
-    background:"Soldato", allineamento:"Neutrale", livello:1,
-    giocatore:"", master:"",
-    hp:10, hpMax:10, hpTemp:0, ca:10, iniziativa:0, velocita:9,
-    stats:{FOR:10,DES:10,COS:10,INT:10,SAG:10,CAR:10},
-    savingProf:{FOR:false,DES:false,COS:false,INT:false,SAG:false,CAR:false},
-    skillProf:{},
-    monete:{rame:0,argento:0,elettro:0,oro:0,platino:0},
-    heroicInspiration:false,
-    deathSaves:{success:0,fail:0},
-    traits:"", ideals:"", bonds:"", flaws:"",
-    features:"", attacks:"", equipment:"",
-    spellcastingAbility:"", spellSlots:{1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0}, spells:"",
-    note:"",
+// ── Login ────────────────────────────────────────────────────────────────────
+function LoginScreen({onLogin}) {
+  const [mode,setMode]=useState(null);
+  const [pw,setPw]=useState("");
+  const [name,setName]=useState("");
+  const [err,setErr]=useState("");
+  const submit = () => {
+    setErr("");
+    if(mode==="master"){ if(pw===MASTER_PASSWORD) onLogin({role:"master",name:"Master"}); else setErr("Password errata."); }
+    else if(mode==="player"){ const n=name.trim(); if(!n){setErr("Inserisci il tuo nome.");return;} onLogin({role:"player",name:n}); }
   };
+  return (
+    <div className="login-screen">
+      <div className="login-box">
+        <div style={{fontSize:52,marginBottom:12}}>⚔️</div>
+        <div className="login-title">EGEMONIA</div>
+        <div className="login-sub">Portale della Campagna · D&D 2026</div>
+        <div className="login-choice">
+          <div className={`login-card${mode==="master"?" sel":""}`} onClick={()=>{setMode("master");setErr("");}}>
+            <div className="login-icon">🗡️</div>
+            <div className="login-card-title">Master</div>
+            <div className="login-card-desc">Accesso completo a tutto il portale</div>
+          </div>
+          <div className={`login-card${mode==="player"?" sel":""}`} onClick={()=>{setMode("player");setErr("");}}>
+            <div className="login-icon">🎲</div>
+            <div className="login-card-title">Giocatore</div>
+            <div className="login-card-desc">Modifica la tua scheda, leggi lore e cronache</div>
+          </div>
+        </div>
+        {mode==="master" && <div style={{marginBottom:12,textAlign:"left"}}><label className="label">Password Master</label><input className="input" type="password" placeholder="••••••••" value={pw} onChange={e=>setPw(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} autoFocus/></div>}
+        {mode==="player" && <div style={{marginBottom:12,textAlign:"left"}}><label className="label">Il tuo nome</label><input className="input" placeholder="Es. Marco" value={name} onChange={e=>setName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} autoFocus/></div>}
+        {err && <div className="err">⚠ {err}</div>}
+        {mode && <button className="btn btn-primary" style={{width:"100%",padding:"10px",fontSize:14,marginTop:12}} onClick={submit}>Entra →</button>}
+        <div style={{marginTop:16,fontSize:11,fontFamily:"sans-serif",color:"var(--text3)"}}>Non hai un personaggio? Chiedi al master di crearlo, poi potrai modificarlo.</div>
+      </div>
+    </div>
+  );
 }
 
-// ── localStorage helpers ─────────────────────────────────────────────────────
-const LS = {
-  get: (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch { return def; } },
-  set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
-};
-
 // ── Character Sheet ──────────────────────────────────────────────────────────
-function CharacterSheet({ pg, onSave, onClose, onDelete }) {
-  const [p, setP] = useState({...pg});
-  const [tab, setTab] = useState("base");
-  const pbv = pb(p.livello);
-
-  const up = (k,v) => setP(prev => ({...prev, [k]:v}));
-  const upStat = (k,v) => setP(prev => ({...prev, stats:{...prev.stats,[k]:parseInt(v)||10}}));
-  const upSaveProf = k => setP(prev => ({...prev, savingProf:{...prev.savingProf,[k]:!prev.savingProf[k]}}));
-  const upSkill = name => setP(prev => {
-    const cur = prev.skillProf[name]||false;
-    const nxt = cur===false?"prof":cur==="prof"?"exp":false;
-    return {...prev, skillProf:{...prev.skillProf,[name]:nxt}};
-  });
-  const upCoin = (k,v) => setP(prev => ({...prev, monete:{...prev.monete,[k]:parseInt(v)||0}}));
-  const upDeath = (type,idx) => setP(prev => ({...prev, deathSaves:{...prev.deathSaves,[type]:prev.deathSaves[type]===idx?idx-1:idx}}));
-
-  const TABS_SHEET = [
-    {id:"base",label:"Base"},{id:"combat",label:"Combattimento"},
-    {id:"skills",label:"Abilità"},{id:"features",label:"Abilità Speciali"},
-    {id:"spells",label:"Magia"},{id:"equipment",label:"Equipaggiamento"},
-    {id:"notes",label:"Note Sessione"},
-  ];
-
+function CharacterSheet({pg,onSave,onClose,onDelete,canEdit}) {
+  const [p,setP]=useState({...pg});
+  const [tab,setTab]=useState("base");
+  const pb=pbv(p.livello);
+  const ro=!canEdit;
+  const up=(k,v)=>!ro&&setP(o=>({...o,[k]:v}));
+  const upN=(k,v)=>!ro&&setP(o=>({...o,[k]:parseInt(v)||0}));
+  const upStat=(k,v)=>!ro&&setP(o=>({...o,stats:{...o.stats,[k]:parseInt(v)||10}}));
+  const upSP=k=>!ro&&setP(o=>({...o,savingProf:{...o.savingProf,[k]:!o.savingProf[k]}}));
+  const upSk=n=>!ro&&setP(o=>{const c=o.skillProf[n]||false;const nx=c===false?"prof":c==="prof"?"exp":false;return{...o,skillProf:{...o.skillProf,[n]:nx}};});
+  const upCo=(k,v)=>!ro&&setP(o=>({...o,monete:{...o.monete,[k]:parseInt(v)||0}}));
+  const upDe=(t,i)=>!ro&&setP(o=>({...o,deathSaves:{...o.deathSaves,[t]:o.deathSaves[t]===i?i-1:i}}));
+  const STABS=[{id:"base",l:"Base"},{id:"combat",l:"Combattimento"},{id:"skills",l:"Abilità"},{id:"features",l:"Abilità Speciali"},{id:"spells",l:"Magia"},{id:"equip",l:"Equipaggiamento"},{id:"notes",l:"Note Sessione"}];
   return (
     <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
       <div className="modal">
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:"1rem",gap:8}}>
           <div>
             <div className="modal-title" style={{marginBottom:2}}>{p.nome||"Nuovo Personaggio"}</div>
-            <div style={{fontSize:12,fontFamily:"sans-serif",color:"var(--text2)"}}>
-              {p.species} · {p.classe}{p.sottoClasse?` (${p.sottoClasse})`:""} · Lv.{p.livello} · PB +{pbv}
-            </div>
+            <div style={{fontSize:12,fontFamily:"sans-serif",color:"var(--text2)"}}>{p.species} · {p.classe}{p.sottoClasse?` (${p.sottoClasse})`:""} · Lv.{p.livello} · PB +{pb}{ro&&<span className="badge badge-gray" style={{marginLeft:8}}>Sola lettura</span>}</div>
           </div>
           <div style={{display:"flex",gap:6,flexShrink:0}}>
-            <button className="btn btn-danger" onClick={()=>{ if(confirm("Eliminare questo PG?")) onDelete(p.id); }}>Elimina</button>
-            <button className="btn" onClick={onClose}>Annulla</button>
-            <button className="btn btn-primary" onClick={()=>onSave(p)}>Salva</button>
+            {!ro&&onDelete&&<button className="btn btn-danger" onClick={()=>{if(confirm("Eliminare?"))onDelete(p.id);}}>Elimina</button>}
+            <button className="btn" onClick={onClose}>{ro?"Chiudi":"Annulla"}</button>
+            {!ro&&<button className="btn btn-primary" onClick={()=>onSave(p)}>Salva</button>}
           </div>
         </div>
+        <div className="tabs-inner">{STABS.map(t=><button key={t.id} className={`tab-inner${tab===t.id?" active":""}`} onClick={()=>setTab(t.id)}>{t.l}</button>)}</div>
 
-        <div className="tabs-inner">
-          {TABS_SHEET.map(t=><button key={t.id} className={`tab-inner${tab===t.id?" active":""}`} onClick={()=>setTab(t.id)}>{t.label}</button>)}
-        </div>
-
-        {/* BASE */}
-        {tab==="base" && (
+        {tab==="base"&&(
           <div style={{display:"flex",flexDirection:"column",gap:10}}>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-              <div><label className="label">Nome personaggio</label><input className="input" value={p.nome} onChange={e=>up("nome",e.target.value)}/></div>
-              <div><label className="label">Giocatore</label><input className="input" value={p.giocatore} onChange={e=>up("giocatore",e.target.value)}/></div>
-              <div><label className="label">Classe</label><select className="select" value={p.classe} onChange={e=>up("classe",e.target.value)}>{CLASSI.map(c=><option key={c}>{c}</option>)}</select></div>
-              <div><label className="label">Sottoclasse</label><input className="input" value={p.sottoClasse} onChange={e=>up("sottoClasse",e.target.value)} placeholder="Es. Evocatore, Campione..."/></div>
-              <div><label className="label">Species (2024)</label><select className="select" value={p.species} onChange={e=>up("species",e.target.value)}>{SPECIES.map(s=><option key={s}>{s}</option>)}</select></div>
-              <div><label className="label">Background</label><select className="select" value={p.background} onChange={e=>up("background",e.target.value)}>{BACKGROUNDS.map(b=><option key={b}>{b}</option>)}</select></div>
-              <div><label className="label">Livello</label><input className="input" type="number" min={1} max={20} value={p.livello} onChange={e=>up("livello",parseInt(e.target.value)||1)}/></div>
-              <div><label className="label">Allineamento</label><select className="select" value={p.allineamento} onChange={e=>up("allineamento",e.target.value)}>{ALLINEAMENTI.map(a=><option key={a}>{a}</option>)}</select></div>
-              <div><label className="label">Master di riferimento</label><input className="input" value={p.master} onChange={e=>up("master",e.target.value)}/></div>
+              {[[" Nome","nome","text"],[" Giocatore","giocatore","text"]].map(([l,k])=><div key={k}><label className="label">{l}</label><input className="input" value={p[k]||""} onChange={e=>up(k,e.target.value)} disabled={ro}/></div>)}
+              <div><label className="label">Classe</label><select className="select" value={p.classe} onChange={e=>up("classe",e.target.value)} disabled={ro}>{CLASSI.map(c=><option key={c}>{c}</option>)}</select></div>
+              <div><label className="label">Sottoclasse</label><input className="input" value={p.sottoClasse||""} onChange={e=>up("sottoClasse",e.target.value)} disabled={ro} placeholder="Es. Evocatore..."/></div>
+              <div><label className="label">Species</label><select className="select" value={p.species} onChange={e=>up("species",e.target.value)} disabled={ro}>{SPECIES.map(s=><option key={s}>{s}</option>)}</select></div>
+              <div><label className="label">Background</label><select className="select" value={p.background} onChange={e=>up("background",e.target.value)} disabled={ro}>{BACKGROUNDS.map(b=><option key={b}>{b}</option>)}</select></div>
+              <div><label className="label">Livello</label><input className="input" type="number" min={1} max={20} value={p.livello} onChange={e=>up("livello",parseInt(e.target.value)||1)} disabled={ro}/></div>
+              <div><label className="label">Allineamento</label><select className="select" value={p.allineamento} onChange={e=>up("allineamento",e.target.value)} disabled={ro}>{ALLINEAMENTI.map(a=><option key={a}>{a}</option>)}</select></div>
+              <div><label className="label">Master di riferimento</label><input className="input" value={p.master||""} onChange={e=>up("master",e.target.value)} disabled={ro}/></div>
             </div>
-            <div>
-              <div className="section-lbl" style={{marginTop:8}}>Punteggi di Caratteristica</div>
+            <div><div className="section-lbl" style={{marginTop:4}}>Caratteristiche</div>
               <div style={{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:8}}>
                 {ABILITY_KEYS.map(k=>(
                   <div key={k} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
-                    <div style={{fontSize:9,fontFamily:"'Cinzel',serif",fontWeight:700,color:"var(--accent)",letterSpacing:".08em"}}>{k}</div>
-                    <input className="input" type="number" min={1} max={30} value={p.stats[k]} onChange={e=>upStat(k,e.target.value)} style={{textAlign:"center",padding:"4px 2px",fontWeight:700,fontSize:18}}/>
+                    <div style={{fontSize:9,fontFamily:"'Cinzel',serif",fontWeight:700,color:"var(--accent)"}}>{k}</div>
+                    <input className="input" type="number" min={1} max={30} value={p.stats[k]} onChange={e=>upStat(k,e.target.value)} disabled={ro} style={{textAlign:"center",padding:"4px 2px",fontWeight:700,fontSize:18}}/>
                     <div style={{fontSize:12,fontWeight:600,color:"var(--accent)",fontFamily:"sans-serif"}}>{modStr(p.stats[k])}</div>
                   </div>
                 ))}
               </div>
             </div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-              <div><label className="label">Tratti della personalità</label><textarea className="input" value={p.traits} onChange={e=>up("traits",e.target.value)} style={{minHeight:54}}/></div>
-              <div><label className="label">Ideali</label><textarea className="input" value={p.ideals} onChange={e=>up("ideals",e.target.value)} style={{minHeight:54}}/></div>
-              <div><label className="label">Legami</label><textarea className="input" value={p.bonds} onChange={e=>up("bonds",e.target.value)} style={{minHeight:54}}/></div>
-              <div><label className="label">Difetti</label><textarea className="input" value={p.flaws} onChange={e=>up("flaws",e.target.value)} style={{minHeight:54}}/></div>
+              {[["Tratti personalità","traits"],["Ideali","ideals"],["Legami","bonds"],["Difetti","flaws"]].map(([l,k])=>(
+                <div key={k}><label className="label">{l}</label><textarea className="input" value={p[k]||""} onChange={e=>up(k,e.target.value)} disabled={ro} style={{minHeight:54}}/></div>
+              ))}
             </div>
           </div>
         )}
 
-        {/* COMBAT */}
-        {tab==="combat" && (
+        {tab==="combat"&&(
           <div style={{display:"flex",flexDirection:"column",gap:10}}>
             <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8}}>
               {[["hp","HP Attuali"],["hpMax","HP Massimi"],["hpTemp","HP Temporanei"],["ca","Classe Armatura"],["iniziativa","Iniziativa"],["velocita","Velocità (m)"]].map(([k,l])=>(
-                <div key={k}>
-                  <label className="label">{l}</label>
-                  <input className="input" type="number" value={p[k]} onChange={e=>up(k,parseInt(e.target.value)||0)} style={{textAlign:"center",fontWeight:700,fontSize:18}}/>
-                </div>
+                <div key={k}><label className="label">{l}</label><input className="input" type="number" value={p[k]} onChange={e=>upN(k,e.target.value)} disabled={ro} style={{textAlign:"center",fontWeight:700,fontSize:18}}/></div>
               ))}
             </div>
-            <div>
-              <div className="section-lbl">Tiri Salvezza <span style={{fontWeight:400,textTransform:"none",fontSize:10}}>(● = competenza)</span></div>
+            <div><div className="section-lbl">Tiri Salvezza</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:4}}>
                 {ABILITY_KEYS.map(k=>(
                   <div key={k} className="skill-row">
-                    <div className={`prof-dot${p.savingProf[k]?" prof":""}`} onClick={()=>upSaveProf(k)}/>
-                    <span className="skill-val">{skillBonus(p.stats[k],p.savingProf[k],false,pbv)}</span>
+                    <div className={`prof-dot${p.savingProf[k]?" prof":""}${ro?" ro":""}`} onClick={()=>upSP(k)}/>
+                    <span className="skill-val">{skBonus(p.stats[k],p.savingProf[k],false,pb)}</span>
                     <span>{ABILITY_FULL[k]}</span>
                   </div>
                 ))}
               </div>
             </div>
-            <div>
-              <div className="section-lbl">Tiri Salvezza Morte</div>
+            <div><div className="section-lbl">Tiri Salvezza Morte</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-                <div>
-                  <div style={{fontSize:11,fontFamily:"sans-serif",color:"#16A34A",marginBottom:4}}>Successi</div>
-                  <div style={{display:"flex",gap:6}}>{[1,2,3].map(i=><div key={i} className={`death-dot${p.deathSaves.success>=i?" suc":""}`} onClick={()=>upDeath("success",i)}/>)}</div>
-                </div>
-                <div>
-                  <div style={{fontSize:11,fontFamily:"sans-serif",color:"#DC2626",marginBottom:4}}>Fallimenti</div>
-                  <div style={{display:"flex",gap:6}}>{[1,2,3].map(i=><div key={i} className={`death-dot${p.deathSaves.fail>=i?" fail":""}`} onClick={()=>upDeath("fail",i)}/>)}</div>
-                </div>
+                <div><div style={{fontSize:11,fontFamily:"sans-serif",color:"#16A34A",marginBottom:4}}>Successi</div><div style={{display:"flex",gap:6}}>{[1,2,3].map(i=><div key={i} className={`death-dot${p.deathSaves.success>=i?" suc":""}`} onClick={()=>upDe("success",i)}/>)}</div></div>
+                <div><div style={{fontSize:11,fontFamily:"sans-serif",color:"#DC2626",marginBottom:4}}>Fallimenti</div><div style={{display:"flex",gap:6}}>{[1,2,3].map(i=><div key={i} className={`death-dot${p.deathSaves.fail>=i?" fail":""}`} onClick={()=>upDe("fail",i)}/>)}</div></div>
               </div>
             </div>
             <div style={{display:"flex",alignItems:"center",gap:10}}>
-              <button className={`insp-btn${p.heroicInspiration?" on":""}`} onClick={()=>up("heroicInspiration",!p.heroicInspiration)}>✦</button>
+              <button className={`insp-btn${p.heroicInspiration?" on":""}`} onClick={()=>up("heroicInspiration",!p.heroicInspiration)} disabled={ro}>✦</button>
               <span style={{fontSize:13,fontFamily:"sans-serif"}}>Ispirazione Eroica {p.heroicInspiration?<span className="badge badge-amber">ATTIVA</span>:<span className="badge badge-gray">inattiva</span>}</span>
             </div>
           </div>
         )}
 
-        {/* SKILLS */}
-        {tab==="skills" && (
+        {tab==="skills"&&(
           <div>
-            <div style={{fontSize:11,fontFamily:"sans-serif",color:"var(--text2)",marginBottom:8}}>
-              Clicca il cerchio: <span style={{color:"var(--accent)"}}>●</span> Competenza · <span style={{color:"#1D9E75"}}>●</span> Expertise · ○ Nessuna
-            </div>
+            {!ro&&<div style={{fontSize:11,fontFamily:"sans-serif",color:"var(--text2)",marginBottom:8}}>Clicca: <span style={{color:"var(--accent)"}}>●</span> Competenza · <span style={{color:"#1D9E75"}}>●</span> Expertise · ○ Nessuna</div>}
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:1}}>
-              {SKILLS.map(s=>{
-                const prof=p.skillProf[s.name]||false;
-                const val=mod(p.stats[s.ability])+(prof==="exp"?pbv*2:prof==="prof"?pbv:0);
-                return (
-                  <div key={s.name} className="skill-row" style={{padding:"3px 4px"}}>
-                    <div className={`prof-dot${prof==="prof"?" prof":prof==="exp"?" exp":""}`} onClick={()=>upSkill(s.name)}/>
-                    <span className="skill-val">{(val>=0?"+":"")+val}</span>
-                    <span style={{flex:1}}>{s.name}</span>
-                    <span style={{fontSize:10,color:"var(--text3)"}}>{s.ability}</span>
-                  </div>
-                );
-              })}
+              {SKILLS.map(s=>{const pr=p.skillProf[s.name]||false;const val=mod(p.stats[s.ab])+(pr==="exp"?pb*2:pr==="prof"?pb:0);return(
+                <div key={s.name} className="skill-row" style={{padding:"3px 4px"}}>
+                  <div className={`prof-dot${pr==="prof"?" prof":pr==="exp"?" exp":""}${ro?" ro":""}`} onClick={()=>upSk(s.name)}/>
+                  <span className="skill-val">{(val>=0?"+":"")+val}</span>
+                  <span style={{flex:1}}>{s.name}</span>
+                  <span style={{fontSize:10,color:"var(--text3)"}}>{s.ab}</span>
+                </div>
+              );})}
             </div>
             <div className="divider"/>
-            <div className="skill-row">
-              <span style={{color:"var(--text2)"}}>Percezione Passiva:</span>
-              <span style={{fontWeight:700,color:"var(--accent)",marginLeft:6,fontSize:14}}>
-                {10+mod(p.stats.SAG)+(p.skillProf["Percezione"]==="exp"?pbv*2:p.skillProf["Percezione"]==="prof"?pbv:0)}
-              </span>
-            </div>
+            <div className="skill-row"><span style={{color:"var(--text2)"}}>Percezione Passiva:</span><span style={{fontWeight:700,color:"var(--accent)",marginLeft:6,fontSize:14}}>{10+mod(p.stats.SAG)+(p.skillProf["Percezione"]==="exp"?pb*2:p.skillProf["Percezione"]==="prof"?pb:0)}</span></div>
           </div>
         )}
 
-        {/* FEATURES */}
-        {tab==="features" && (
+        {tab==="features"&&(
           <div style={{display:"flex",flexDirection:"column",gap:10}}>
-            <div><label className="label">Abilità, Tratti e Caratteristiche di Classe/Species</label><textarea className="input" style={{minHeight:130}} value={p.features} onChange={e=>up("features",e.target.value)} placeholder="Es. Surge d'Azione, Secondo Soffio, Capacità Divina..."/></div>
-            <div><label className="label">Attacchi e Azioni (una per riga)</label><textarea className="input" style={{minHeight:100}} value={p.attacks} onChange={e=>up("attacks",e.target.value)} placeholder="Es. Spada Lunga: +5 colpire, 1d8+3 taglio (Mastery: Sap)"/></div>
+            <div><label className="label">Abilità e Tratti di Classe/Species</label><textarea className="input" style={{minHeight:130}} value={p.features||""} onChange={e=>up("features",e.target.value)} disabled={ro} placeholder="Es. Surge d'Azione, Secondo Soffio..."/></div>
+            <div><label className="label">Attacchi e Azioni (una per riga)</label><textarea className="input" style={{minHeight:100}} value={p.attacks||""} onChange={e=>up("attacks",e.target.value)} disabled={ro} placeholder="Es. Spada Lunga: +5 colpire, 1d8+3 taglio"/></div>
           </div>
         )}
 
-        {/* SPELLS */}
-        {tab==="spells" && (
+        {tab==="spells"&&(
           <div style={{display:"flex",flexDirection:"column",gap:10}}>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
-              <div>
-                <label className="label">Caratteristica Incantesimi</label>
-                <select className="select" value={p.spellcastingAbility} onChange={e=>up("spellcastingAbility",e.target.value)}>
-                  <option value="">—</option>{ABILITY_KEYS.map(k=><option key={k}>{k}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="label">CD Tiro Salvezza</label>
-                <input className="input" type="number" value={p.spellSaveDC||(p.spellcastingAbility?8+pbv+mod(p.stats[p.spellcastingAbility]||10):0)} onChange={e=>up("spellSaveDC",e.target.value)} style={{textAlign:"center",fontWeight:700}}/>
-              </div>
-              <div>
-                <label className="label">Bonus Attacco Incant.</label>
-                <input className="input" type="number" value={p.spellAttackBonus||(p.spellcastingAbility?pbv+mod(p.stats[p.spellcastingAbility]||10):0)} onChange={e=>up("spellAttackBonus",e.target.value)} style={{textAlign:"center",fontWeight:700}}/>
-              </div>
+              <div><label className="label">Car. Incantesimi</label><select className="select" value={p.spellcastingAbility||""} onChange={e=>up("spellcastingAbility",e.target.value)} disabled={ro}><option value="">—</option>{ABILITY_KEYS.map(k=><option key={k}>{k}</option>)}</select></div>
+              <div><label className="label">CD Tiro Salvezza</label><input className="input" type="number" value={p.spellSaveDC||(p.spellcastingAbility?8+pb+mod(p.stats[p.spellcastingAbility]||10):0)} onChange={e=>up("spellSaveDC",e.target.value)} disabled={ro} style={{textAlign:"center",fontWeight:700}}/></div>
+              <div><label className="label">Bonus Attacco</label><input className="input" type="number" value={p.spellAttackBonus||(p.spellcastingAbility?pb+mod(p.stats[p.spellcastingAbility]||10):0)} onChange={e=>up("spellAttackBonus",e.target.value)} disabled={ro} style={{textAlign:"center",fontWeight:700}}/></div>
             </div>
-            <div>
-              <div className="section-lbl">Slot Incantesimo</div>
+            <div><div className="section-lbl">Slot Incantesimo</div>
               <div style={{display:"grid",gridTemplateColumns:"repeat(9,1fr)",gap:4}}>
                 {[1,2,3,4,5,6,7,8,9].map(l=>(
                   <div key={l} style={{textAlign:"center"}}>
                     <div style={{fontSize:10,fontFamily:"sans-serif",color:"var(--text2)"}}>Lv{l}</div>
-                    <input className="input" type="number" min={0} max={9} value={p.spellSlots[l]||0} onChange={e=>setP(prev=>({...prev,spellSlots:{...prev.spellSlots,[l]:parseInt(e.target.value)||0}}))} style={{textAlign:"center",padding:"3px 2px",fontSize:14,fontWeight:700}}/>
+                    <input className="input" type="number" min={0} max={9} value={p.spellSlots[l]||0} onChange={e=>setP(o=>({...o,spellSlots:{...o.spellSlots,[l]:parseInt(e.target.value)||0}}))} disabled={ro} style={{textAlign:"center",padding:"3px 2px",fontSize:14,fontWeight:700}}/>
                   </div>
                 ))}
               </div>
             </div>
-            <div><label className="label">Elenco Incantesimi</label><textarea className="input" style={{minHeight:140}} value={p.spells} onChange={e=>up("spells",e.target.value)} placeholder={"Trucchetti: Dardo Magico, Raggio di Gelo\nLiv 1 (4): Mano Bruciante, Scudo, Sonno\nLiv 2 (3): Invisibilità..."}/></div>
+            <div><label className="label">Elenco Incantesimi</label><textarea className="input" style={{minHeight:130}} value={p.spells||""} onChange={e=>up("spells",e.target.value)} disabled={ro} placeholder={"Trucchetti: Dardo Magico\nLiv 1 (4): Mano Bruciante, Scudo..."}/></div>
           </div>
         )}
 
-        {/* EQUIPMENT */}
-        {tab==="equipment" && (
+        {tab==="equip"&&(
           <div style={{display:"flex",flexDirection:"column",gap:10}}>
-            <div>
-              <div className="section-lbl">Monete</div>
+            <div><div className="section-lbl">Monete</div>
               <div className="coin-row">
                 {[["rame","#92400E","RP"],["argento","#6B7280","AR"],["elettro","#B45309","EL"],["oro","#D97706","ORO"],["platino","#9333EA","PL"]].map(([k,col,lbl])=>(
-                  <div key={k} className="coin-box">
-                    <span className="coin-lbl" style={{color:col}}>{lbl}</span>
-                    <input className="input" type="number" min={0} value={p.monete[k]||0} onChange={e=>upCoin(k,e.target.value)} style={{textAlign:"center",fontWeight:700,padding:"4px 2px"}}/>
-                  </div>
+                  <div key={k} className="coin-box"><span className="coin-lbl" style={{color:col}}>{lbl}</span><input className="input" type="number" min={0} value={p.monete[k]||0} onChange={e=>upCo(k,e.target.value)} disabled={ro} style={{textAlign:"center",fontWeight:700,padding:"4px 2px"}}/></div>
                 ))}
               </div>
             </div>
-            <div><label className="label">Equipaggiamento e Oggetti</label><textarea className="input" style={{minHeight:150}} value={p.equipment} onChange={e=>up("equipment",e.target.value)} placeholder="Armi, armatura, oggetti magici, kit, consumabili..."/></div>
+            <div><label className="label">Equipaggiamento e Oggetti</label><textarea className="input" style={{minHeight:150}} value={p.equipment||""} onChange={e=>up("equipment",e.target.value)} disabled={ro} placeholder="Armi, armatura, oggetti magici, kit..."/></div>
           </div>
         )}
 
-        {/* NOTES */}
-        {tab==="notes" && (
+        {tab==="notes"&&(
           <div style={{display:"flex",flexDirection:"column",gap:10}}>
-            <div><label className="label">Azioni tra le sessioni / Obiettivi attuali</label><textarea className="input" style={{minHeight:110}} value={p.note} onChange={e=>up("note",e.target.value)} placeholder="Cosa sta facendo il personaggio tra una sessione e l'altra?"/></div>
-            <div style={{fontSize:12,fontFamily:"sans-serif",color:"var(--text2)",padding:"8px 10px",background:"#FEF3C7",borderRadius:"var(--radius-sm)",borderLeft:"3px solid var(--accent)"}}>
-              💡 Questa sezione è visibile ai master. Usala per comunicare le intenzioni del tuo personaggio tra le sessioni!
-            </div>
+            <div><label className="label">Azioni tra le sessioni / Obiettivi attuali</label><textarea className="input" style={{minHeight:110}} value={p.note||""} onChange={e=>up("note",e.target.value)} disabled={ro} placeholder="Cosa sta facendo il personaggio tra una sessione e l'altra?"/></div>
+            <div style={{fontSize:12,fontFamily:"sans-serif",color:"#92400E",padding:"8px 10px",background:"#FEF3C7",borderRadius:"var(--radius-sm)",borderLeft:"3px solid var(--accent)"}}>💡 Questa sezione è visibile ai master. Usala per comunicare le intenzioni del tuo personaggio!</div>
           </div>
         )}
       </div>
@@ -404,29 +347,31 @@ function CharacterSheet({ pg, onSave, onClose, onDelete }) {
 }
 
 // ── PG Card ──────────────────────────────────────────────────────────────────
-function PGCard({ pg, onEdit }) {
-  const pbv = pb(pg.livello);
-  const hpPct = Math.max(0, Math.min(100, (pg.hp/pg.hpMax)*100));
-  const hpColor = hpPct>60?"#16A34A":hpPct>25?"#D97706":"#DC2626";
+function PGCard({pg,onEdit,isMine,isMaster}) {
+  const pb=pbv(pg.livello);
+  const pct=Math.max(0,Math.min(100,(pg.hp/pg.hpMax)*100));
+  const hpc=pct>60?"#16A34A":pct>25?"#D97706":"#DC2626";
+  const clickable=isMaster||isMine;
   return (
-    <div className="card-amber" style={{cursor:"pointer"}} onClick={()=>onEdit(pg)}>
+    <div className="card-amber" style={{cursor:clickable?"pointer":"default"}} onClick={()=>clickable&&onEdit(pg)}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6}}>
         <div>
-          <div style={{fontFamily:"'Cinzel',serif",fontSize:15,fontWeight:700,color:"var(--text)"}}>{pg.nome||"PG senza nome"}</div>
+          <div style={{fontFamily:"'Cinzel',serif",fontSize:15,fontWeight:700,color:"var(--text)",display:"flex",alignItems:"center",gap:6}}>
+            {pg.nome||"PG senza nome"}{isMine&&<span className="badge badge-player">La tua scheda</span>}
+          </div>
           <div style={{fontSize:12,fontFamily:"sans-serif",color:"var(--text2)"}}>{pg.species} · {pg.classe}{pg.sottoClasse?` (${pg.sottoClasse})`:""} · Lv.{pg.livello}</div>
         </div>
         <div style={{textAlign:"right",flexShrink:0}}>
           <div style={{fontSize:12,fontFamily:"sans-serif",color:"#92400E",fontWeight:700}}>🪙 {pg.monete?.oro||0} go</div>
-          <div style={{fontSize:11,fontFamily:"sans-serif",color:"var(--text2)"}}>CA {pg.ca} · PB +{pbv}</div>
+          <div style={{fontSize:11,fontFamily:"sans-serif",color:"var(--text2)"}}>CA {pg.ca} · PB +{pb}</div>
           {pg.heroicInspiration&&<span className="badge badge-amber" style={{marginTop:2}}>✦ Ispirazione</span>}
         </div>
       </div>
       <div style={{marginBottom:6}}>
         <div style={{display:"flex",justifyContent:"space-between",fontSize:11,fontFamily:"sans-serif",color:"var(--text2)",marginBottom:2}}>
-          <span>HP {pg.hp}/{pg.hpMax}{pg.hpTemp>0?` (+${pg.hpTemp})`:""}</span>
-          <span style={{color:hpColor,fontWeight:600}}>{Math.round(hpPct)}%</span>
+          <span>HP {pg.hp}/{pg.hpMax}{pg.hpTemp>0?` (+${pg.hpTemp})`:""}</span><span style={{color:hpc,fontWeight:600}}>{Math.round(pct)}%</span>
         </div>
-        <div className="hp-bar"><div className="hp-fill" style={{width:`${hpPct}%`,background:hpColor}}/></div>
+        <div className="hp-bar"><div className="hp-fill" style={{width:`${pct}%`,background:hpc}}/></div>
       </div>
       <div style={{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:4,margin:"8px 0"}}>
         {ABILITY_KEYS.map(k=>(
@@ -448,50 +393,49 @@ function PGCard({ pg, onEdit }) {
 }
 
 // ── Personaggi Tab ───────────────────────────────────────────────────────────
-function PersonaggiTab({ pgs, setPgs }) {
-  const [sheet, setSheet] = useState(null);
-  const [filtroMaster, setFiltroMaster] = useState("");
-  const [filtroClasse, setFiltroClasse] = useState("");
-  const masters = [...new Set(pgs.map(p=>p.master))].filter(Boolean);
-  const filtered = pgs.filter(p=>(!filtroMaster||p.master===filtroMaster)&&(!filtroClasse||p.classe===filtroClasse));
-
-  const save = pg => { setPgs(pgs.some(p=>p.id===pg.id)?pgs.map(p=>p.id===pg.id?pg:p):[...pgs,pg]); setSheet(null); };
-  const del = id => { setPgs(pgs.filter(p=>p.id!==id)); setSheet(null); };
-
+function PersonaggiTab({pgs,setPgs,user}) {
+  const [sheet,setSheet]=useState(null);
+  const [canEdit,setCanEdit]=useState(false);
+  const [fMaster,setFMaster]=useState("");
+  const [fClasse,setFClasse]=useState("");
+  const isMaster=user.role==="master";
+  const masters=[...new Set(pgs.map(p=>p.master))].filter(Boolean);
+  const filtered=pgs.filter(p=>(!fMaster||p.master===fMaster)&&(!fClasse||p.classe===fClasse));
+  const openSheet=pg=>{const mine=user.role==="player"&&pg.giocatore.toLowerCase()===user.name.toLowerCase();setCanEdit(isMaster||mine);setSheet(pg);};
+  const save=pg=>{setPgs(pgs.some(p=>p.id===pg.id)?pgs.map(p=>p.id===pg.id?pg:p):[...pgs,pg]);setSheet(null);};
+  const del=id=>{setPgs(pgs.filter(p=>p.id!==id));setSheet(null);};
   return (
     <div>
+      {!isMaster&&<div className="ro-banner">🎲 Sei connesso come <strong style={{margin:"0 4px"}}>{user.name}</strong> — puoi modificare solo la tua scheda. Le altre sono in sola lettura.</div>}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"1rem",flexWrap:"wrap",gap:8}}>
         <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-          <select className="select" style={{width:"auto"}} value={filtroMaster} onChange={e=>setFiltroMaster(e.target.value)}>
-            <option value="">Tutti i master</option>{masters.map(m=><option key={m}>{m}</option>)}
-          </select>
-          <select className="select" style={{width:"auto"}} value={filtroClasse} onChange={e=>setFiltroClasse(e.target.value)}>
-            <option value="">Tutte le classi</option>{CLASSI.map(c=><option key={c}>{c}</option>)}
-          </select>
+          <select className="select" style={{width:"auto"}} value={fMaster} onChange={e=>setFMaster(e.target.value)}><option value="">Tutti i master</option>{masters.map(m=><option key={m}>{m}</option>)}</select>
+          <select className="select" style={{width:"auto"}} value={fClasse} onChange={e=>setFClasse(e.target.value)}><option value="">Tutte le classi</option>{CLASSI.map(c=><option key={c}>{c}</option>)}</select>
         </div>
-        <button className="btn btn-primary" onClick={()=>setSheet(blankPG())}>+ Nuovo PG</button>
+        {isMaster&&<button className="btn btn-primary" onClick={()=>{setCanEdit(true);setSheet(blankPG());}}>+ Nuovo PG</button>}
       </div>
       {filtered.length===0
-        ? <div className="empty-state"><div style={{fontSize:40,marginBottom:8}}>⚔️</div><div style={{marginBottom:12}}>Nessun personaggio ancora.</div><button className="btn btn-primary" onClick={()=>setSheet(blankPG())}>Aggiungi il primo PG</button></div>
-        : <div className="grid2">{filtered.map(pg=><PGCard key={pg.id} pg={pg} onEdit={setSheet}/>)}</div>
+        ?<div className="empty-state"><div style={{fontSize:40,marginBottom:8}}>⚔️</div><div style={{marginBottom:12}}>Nessun personaggio ancora.</div>{isMaster&&<button className="btn btn-primary" onClick={()=>{setCanEdit(true);setSheet(blankPG());}}>Aggiungi il primo PG</button>}</div>
+        :<div className="grid2">{filtered.map(pg=>{const mine=user.role==="player"&&pg.giocatore.toLowerCase()===user.name.toLowerCase();return<PGCard key={pg.id} pg={pg} onEdit={openSheet} isMine={mine} isMaster={isMaster}/>;})}</div>
       }
-      {sheet&&<CharacterSheet pg={sheet} onSave={save} onClose={()=>setSheet(null)} onDelete={del}/>}
+      {sheet&&<CharacterSheet pg={sheet} onSave={save} onClose={()=>setSheet(null)} onDelete={isMaster?del:null} canEdit={canEdit}/>}
     </div>
   );
 }
 
 // ── Lore Tab ─────────────────────────────────────────────────────────────────
-function LoreTab({ lore, setLore }) {
-  const [modal, setModal] = useState(null);
-  const [filtro, setFiltro] = useState("");
-  const [cerca, setCerca] = useState("");
-  const filtered = lore.filter(l=>(!filtro||l.categoria===filtro)&&(!cerca||l.titolo.toLowerCase().includes(cerca.toLowerCase())||l.contenuto.toLowerCase().includes(cerca.toLowerCase())));
+function LoreTab({lore,setLore,user}) {
+  const [modal,setModal]=useState(null);
+  const [filtro,setFiltro]=useState("");
+  const [cerca,setCerca]=useState("");
+  const isMaster=user.role==="master";
+  const filtered=lore.filter(l=>(!filtro||l.categoria===filtro)&&(!cerca||l.titolo.toLowerCase().includes(cerca.toLowerCase())||l.contenuto.toLowerCase().includes(cerca.toLowerCase())));
 
-  function LoreModal({ item, onSave, onClose, onDelete }) {
-    const [form, setForm] = useState(item||{titolo:"",categoria:"Luoghi",contenuto:"",tags:[]});
-    const [tagsStr, setTagsStr] = useState((item?.tags||[]).join(", "));
+  function LoreModal({item,onSave,onClose,onDelete}) {
+    const [form,setForm]=useState(item||{titolo:"",categoria:"Luoghi",contenuto:"",tags:[]});
+    const [ts,setTs]=useState((item?.tags||[]).join(", "));
     const set=(k,v)=>setForm(f=>({...f,[k]:v}));
-    return (
+    return(
       <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
         <div className="modal">
           <div className="modal-title">{item?"Modifica voce":"Nuova voce di Lore"}</div>
@@ -501,11 +445,11 @@ function LoreTab({ lore, setLore }) {
               <div><label className="label">Titolo</label><input className="input" value={form.titolo} onChange={e=>set("titolo",e.target.value)}/></div>
             </div>
             <div><label className="label">Descrizione</label><textarea className="input" style={{minHeight:110}} value={form.contenuto} onChange={e=>set("contenuto",e.target.value)}/></div>
-            <div><label className="label">Tag (separati da virgola)</label><input className="input" value={tagsStr} onChange={e=>setTagsStr(e.target.value)} placeholder="Es. città, pericolo, alleato"/></div>
+            <div><label className="label">Tag (virgola)</label><input className="input" value={ts} onChange={e=>setTs(e.target.value)} placeholder="Es. città, pericolo, alleato"/></div>
             <div style={{display:"flex",gap:8,justifyContent:"flex-end"}}>
               {item&&<button className="btn btn-danger" onClick={()=>{if(confirm("Eliminare?"))onDelete(item.id);}}>Elimina</button>}
               <button className="btn" onClick={onClose}>Annulla</button>
-              <button className="btn btn-primary" onClick={()=>onSave({...form,tags:tagsStr.split(",").map(t=>t.trim()).filter(Boolean)})}>Salva</button>
+              <button className="btn btn-primary" onClick={()=>onSave({...form,tags:ts.split(",").map(t=>t.trim()).filter(Boolean)})}>Salva</button>
             </div>
           </div>
         </div>
@@ -515,43 +459,38 @@ function LoreTab({ lore, setLore }) {
 
   const save=form=>{setLore(lore.some(l=>l.id===form.id)?lore.map(l=>l.id===form.id?form:l):[...lore,{...form,id:Date.now()}]);setModal(null);};
   const del=id=>{setLore(lore.filter(l=>l.id!==id));setModal(null);};
-
-  return (
+  return(
     <div>
+      {!isMaster&&<div className="ro-banner">📖 Modalità lettura — solo i master possono aggiungere voci di lore.</div>}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"1rem",flexWrap:"wrap",gap:8}}>
-        <div style={{display:"flex",gap:8}}>
-          <input className="input" style={{width:160}} placeholder="🔍 Cerca..." value={cerca} onChange={e=>setCerca(e.target.value)}/>
-          <select className="select" style={{width:"auto"}} value={filtro} onChange={e=>setFiltro(e.target.value)}>
-            <option value="">Tutte le categorie</option>{LORE_CATS.map(c=><option key={c}>{c}</option>)}
-          </select>
-        </div>
-        <button className="btn btn-primary" onClick={()=>setModal({})}>+ Aggiungi voce</button>
+        <div style={{display:"flex",gap:8}}><input className="input" style={{width:160}} placeholder="🔍 Cerca..." value={cerca} onChange={e=>setCerca(e.target.value)}/><select className="select" style={{width:"auto"}} value={filtro} onChange={e=>setFiltro(e.target.value)}><option value="">Tutte le categorie</option>{LORE_CATS.map(c=><option key={c}>{c}</option>)}</select></div>
+        {isMaster&&<button className="btn btn-primary" onClick={()=>setModal({})}>+ Aggiungi voce</button>}
       </div>
-      {filtered.length===0
-        ? <div className="empty-state"><div style={{fontSize:40,marginBottom:8}}>📜</div><div style={{marginBottom:12}}>Nessuna voce di lore ancora.</div><button className="btn btn-primary" onClick={()=>setModal({})}>Aggiungi la prima</button></div>
-        : <div className="grid2">{filtered.map(l=>(
-            <div key={l.id} className="card" style={{cursor:"pointer"}} onClick={()=>setModal(l)}>
-              <div style={{marginBottom:4}}><span className={`badge ${CAT_BADGE[l.categoria]||"badge-gray"}`}>{l.categoria}</span></div>
-              <div style={{fontFamily:"'Cinzel',serif",fontSize:14,fontWeight:600,color:"var(--text)",margin:"4px 0"}}>{l.titolo}</div>
-              <div style={{fontSize:13,color:"var(--text2)",lineHeight:1.65,fontFamily:"'Crimson Text',serif"}}>{l.contenuto}</div>
-              {l.tags?.length>0&&<div style={{marginTop:8}}>{l.tags.map(t=><span key={t} className="tag">{t}</span>)}</div>}
-            </div>
-          ))}</div>
+      {filtered.length===0?<div className="empty-state"><div style={{fontSize:40,marginBottom:8}}>📜</div><div>Nessuna voce di lore.</div></div>
+        :<div className="grid2">{filtered.map(l=>(
+          <div key={l.id} className="card" style={{cursor:isMaster?"pointer":"default"}} onClick={()=>isMaster&&setModal(l)}>
+            <div style={{marginBottom:4}}><span className={`badge ${CAT_BADGE[l.categoria]||"badge-gray"}`}>{l.categoria}</span></div>
+            <div style={{fontFamily:"'Cinzel',serif",fontSize:14,fontWeight:600,color:"var(--text)",margin:"4px 0"}}>{l.titolo}</div>
+            <div style={{fontSize:13,color:"var(--text2)",lineHeight:1.65,fontFamily:"'Crimson Text',serif"}}>{l.contenuto}</div>
+            {l.tags?.length>0&&<div style={{marginTop:8}}>{l.tags.map(t=><span key={t} className="tag">{t}</span>)}</div>}
+          </div>
+        ))}</div>
       }
-      {modal!==null&&<LoreModal item={Object.keys(modal).length?modal:null} onSave={save} onClose={()=>setModal(null)} onDelete={del}/>}
+      {modal!==null&&isMaster&&<LoreModal item={Object.keys(modal).length?modal:null} onSave={save} onClose={()=>setModal(null)} onDelete={del}/>}
     </div>
   );
 }
 
 // ── Cronache Tab ─────────────────────────────────────────────────────────────
-function CronicheTab({ cronache, setCronache }) {
-  const [modal, setModal] = useState(null);
+function CronicheTab({cronache,setCronache,user}) {
+  const [modal,setModal]=useState(null);
+  const isMaster=user.role==="master";
 
-  function CronicaModal({ item, onSave, onClose, onDelete }) {
-    const [form, setForm] = useState(item||{sessione:cronache.length+1,data:new Date().toISOString().split("T")[0],titolo:"",master:"",giocatori:[],riassunto:"",xp:0,loot:""});
-    const [gioStr, setGioStr] = useState((item?.giocatori||[]).join(", "));
+  function CronicaModal({item,onSave,onClose,onDelete}) {
+    const [form,setForm]=useState(item||{sessione:cronache.length+1,data:new Date().toISOString().split("T")[0],titolo:"",master:"",giocatori:[],riassunto:"",xp:0,loot:""});
+    const [gs,setGs]=useState((item?.giocatori||[]).join(", "));
     const set=(k,v)=>setForm(f=>({...f,[k]:v}));
-    return (
+    return(
       <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
         <div className="modal">
           <div className="modal-title">{item?"Modifica sessione":"Nuova sessione"}</div>
@@ -563,17 +502,17 @@ function CronicheTab({ cronache, setCronache }) {
             <div><label className="label">Titolo</label><input className="input" value={form.titolo} onChange={e=>set("titolo",e.target.value)} placeholder="Es. La caduta di Kharrath"/></div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
               <div><label className="label">Master</label><input className="input" value={form.master} onChange={e=>set("master",e.target.value)}/></div>
-              <div><label className="label">Giocatori (virgola)</label><input className="input" value={gioStr} onChange={e=>setGioStr(e.target.value)} placeholder="Marco, Sara, Giulia"/></div>
+              <div><label className="label">Giocatori (virgola)</label><input className="input" value={gs} onChange={e=>setGs(e.target.value)} placeholder="Marco, Sara, Giulia"/></div>
             </div>
             <div><label className="label">Riassunto</label><textarea className="input" style={{minHeight:90}} value={form.riassunto} onChange={e=>set("riassunto",e.target.value)}/></div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-              <div><label className="label">XP guadagnati</label><input className="input" type="number" min={0} value={form.xp} onChange={e=>set("xp",parseInt(e.target.value)||0)}/></div>
+              <div><label className="label">XP</label><input className="input" type="number" min={0} value={form.xp} onChange={e=>set("xp",parseInt(e.target.value)||0)}/></div>
               <div><label className="label">Loot / Ricompense</label><input className="input" value={form.loot} onChange={e=>set("loot",e.target.value)} placeholder="Es. 150 go, Spada +1"/></div>
             </div>
             <div style={{display:"flex",gap:8,justifyContent:"flex-end"}}>
               {item&&<button className="btn btn-danger" onClick={()=>{if(confirm("Eliminare?"))onDelete(item.id);}}>Elimina</button>}
               <button className="btn" onClick={onClose}>Annulla</button>
-              <button className="btn btn-primary" onClick={()=>onSave({...form,giocatori:gioStr.split(",").map(g=>g.trim()).filter(Boolean)})}>Salva</button>
+              <button className="btn btn-primary" onClick={()=>onSave({...form,giocatori:gs.split(",").map(g=>g.trim()).filter(Boolean)})}>Salva</button>
             </div>
           </div>
         </div>
@@ -584,22 +523,21 @@ function CronicheTab({ cronache, setCronache }) {
   const save=form=>{setCronache(cronache.some(c=>c.id===form.id)?cronache.map(c=>c.id===form.id?form:c):[...cronache,{...form,id:Date.now()}]);setModal(null);};
   const del=id=>{setCronache(cronache.filter(c=>c.id!==id));setModal(null);};
   const sorted=[...cronache].sort((a,b)=>b.sessione-a.sessione);
-
-  return (
+  return(
     <div>
+      {!isMaster&&<div className="ro-banner">📖 Modalità lettura — solo i master possono aggiungere sessioni.</div>}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"1.25rem"}}>
         <div style={{fontSize:13,fontFamily:"sans-serif",color:"var(--text2)"}}>{cronache.length} sessioni · {cronache.reduce((s,c)=>s+(c.xp||0),0).toLocaleString()} XP totali</div>
-        <button className="btn btn-primary" onClick={()=>setModal({})}>+ Nuova sessione</button>
+        {isMaster&&<button className="btn btn-primary" onClick={()=>setModal({})}>+ Nuova sessione</button>}
       </div>
-      {sorted.length===0
-        ? <div className="empty-state"><div style={{fontSize:40,marginBottom:8}}>📖</div><div style={{marginBottom:12}}>Nessuna sessione ancora.</div><button className="btn btn-primary" onClick={()=>setModal({})}>Registra la prima</button></div>
-        : sorted.map((c,i)=>(
+      {sorted.length===0?<div className="empty-state"><div style={{fontSize:40,marginBottom:8}}>📖</div><div>Nessuna sessione ancora.</div></div>
+        :sorted.map((c,i)=>(
           <div key={c.id} style={{display:"flex",gap:"1rem",marginBottom:"1.25rem"}}>
             <div style={{display:"flex",flexDirection:"column",alignItems:"center",flexShrink:0}}>
               <div className="timeline-dot"/>
               {i<sorted.length-1&&<div style={{width:2,flex:1,background:"var(--border)",margin:"4px auto"}}/>}
             </div>
-            <div className="card-amber" style={{flex:1,cursor:"pointer"}} onClick={()=>setModal(c)}>
+            <div className="card-amber" style={{flex:1,cursor:isMaster?"pointer":"default"}} onClick={()=>isMaster&&setModal(c)}>
               <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:4,marginBottom:6}}>
                 <div><span className="badge badge-amber" style={{marginRight:6}}>Sessione {c.sessione}</span><span style={{fontSize:12,fontFamily:"sans-serif",color:"var(--text2)"}}>{new Date(c.data).toLocaleDateString("it-IT",{day:"2-digit",month:"long",year:"numeric"})}</span></div>
                 <div style={{fontSize:12,fontFamily:"sans-serif",color:"var(--accent)",fontWeight:700}}>+{c.xp} XP</div>
@@ -608,137 +546,89 @@ function CronicheTab({ cronache, setCronache }) {
               <div style={{fontSize:13,color:"var(--text2)",lineHeight:1.65,fontFamily:"'Crimson Text',serif"}}>{c.riassunto}</div>
               <div className="divider"/>
               <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:4,fontSize:12,fontFamily:"sans-serif",color:"var(--text2)"}}>
-                <span>⚔️ {c.master} · 🎲 {c.giocatori?.join(", ")}</span>
-                {c.loot&&<span>💰 {c.loot}</span>}
+                <span>⚔️ {c.master} · 🎲 {c.giocatori?.join(", ")}</span>{c.loot&&<span>💰 {c.loot}</span>}
               </div>
             </div>
           </div>
         ))
       }
-      {modal!==null&&<CronicaModal item={Object.keys(modal).length?modal:null} onSave={save} onClose={()=>setModal(null)} onDelete={del}/>}
+      {modal!==null&&isMaster&&<CronicaModal item={Object.keys(modal).length?modal:null} onSave={save} onClose={()=>setModal(null)} onDelete={del}/>}
     </div>
   );
 }
 
 // ── Mappa Tab ────────────────────────────────────────────────────────────────
 function MappaTab() {
-  const [mapImg, setMapImg] = useState(null);
-  const handleFile = e => {
-    const f=e.target.files[0]; if(!f) return;
-    const r=new FileReader(); r.onload=ev=>setMapImg(ev.target.result); r.readAsDataURL(f);
-  };
-  return (
-    <div>
-      {!mapImg ? (
-        <div className="map-placeholder">
-          <div style={{fontSize:56}}>🗺️</div>
-          <div style={{fontFamily:"'Cinzel',serif",fontSize:20,fontWeight:700,color:"var(--text)"}}>Mappa di Egemonia</div>
-          <div style={{fontSize:14,color:"var(--text2)",fontFamily:"sans-serif",maxWidth:320}}>Carica l'immagine della mappa. PNG, JPG o WebP. La mappa è salvata solo nel tuo browser.</div>
-          <label style={{cursor:"pointer"}}>
-            <input type="file" accept="image/*" style={{display:"none"}} onChange={handleFile}/>
-            <div className="btn btn-primary" style={{padding:"8px 20px",fontSize:14}}>Carica mappa</div>
-          </label>
-        </div>
-      ) : (
-        <div>
-          <div style={{display:"flex",justifyContent:"flex-end",marginBottom:8}}>
-            <button className="btn" onClick={()=>setMapImg(null)}>Cambia mappa</button>
-          </div>
-          <div style={{borderRadius:"var(--radius)",overflow:"hidden",border:"1px solid var(--border)",background:"#111"}}>
-            <img src={mapImg} alt="Mappa di Egemonia" style={{width:"100%",display:"block",maxHeight:560,objectFit:"contain"}}/>
-          </div>
-        </div>
-      )}
+  const [img,setImg]=useState(null);
+  const h=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>setImg(ev.target.result);r.readAsDataURL(f);};
+  return img?(
+    <div><div style={{display:"flex",justifyContent:"flex-end",marginBottom:8}}><button className="btn" onClick={()=>setImg(null)}>Cambia mappa</button></div>
+      <div style={{borderRadius:"var(--radius)",overflow:"hidden",border:"1px solid var(--border)",background:"#111"}}><img src={img} alt="Mappa di Egemonia" style={{width:"100%",display:"block",maxHeight:560,objectFit:"contain"}}/></div>
+    </div>
+  ):(
+    <div className="map-ph">
+      <div style={{fontSize:56}}>🗺️</div>
+      <div style={{fontFamily:"'Cinzel',serif",fontSize:20,fontWeight:700}}>Mappa di Egemonia</div>
+      <div style={{fontSize:14,color:"var(--text2)",fontFamily:"sans-serif",maxWidth:320}}>Carica l'immagine della mappa. PNG, JPG o WebP.</div>
+      <label style={{cursor:"pointer"}}><input type="file" accept="image/*" style={{display:"none"}} onChange={h}/><div className="btn btn-primary" style={{padding:"8px 20px",fontSize:14}}>Carica mappa</div></label>
     </div>
   );
 }
 
-// ── Import / Export ──────────────────────────────────────────────────────────
-function DataBar({ pgs, lore, cronache, onImport }) {
-  const fileRef = useRef();
-
-  const exportAll = () => {
-    const data = JSON.stringify({ pgs, lore, cronache, exportedAt: new Date().toISOString() }, null, 2);
-    const a = document.createElement("a");
-    a.href = "data:application/json;charset=utf-8," + encodeURIComponent(data);
-    a.download = `egemonia-backup-${new Date().toISOString().split("T")[0]}.json`;
-    a.click();
-  };
-
-  const importAll = e => {
-    const f = e.target.files[0]; if(!f) return;
-    const r = new FileReader();
-    r.onload = ev => {
-      try {
-        const data = JSON.parse(ev.target.result);
-        if(confirm("Sostituire tutti i dati attuali con quelli del backup?")) {
-          onImport(data);
-        }
-      } catch { alert("File non valido."); }
-    };
-    r.readAsText(f);
-    e.target.value = "";
-  };
-
-  return (
+// ── Data Bar ─────────────────────────────────────────────────────────────────
+function DataBar({pgs,lore,cronache,onImport}) {
+  const ref=useRef();
+  const exp=()=>{const d=JSON.stringify({pgs,lore,cronache,exportedAt:new Date().toISOString()},null,2);const a=document.createElement("a");a.href="data:application/json;charset=utf-8,"+encodeURIComponent(d);a.download=`egemonia-backup-${new Date().toISOString().split("T")[0]}.json`;a.click();};
+  const imp=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(confirm("Sostituire tutti i dati attuali?"))onImport(d);}catch{alert("File non valido.");}};r.readAsText(f);e.target.value="";};
+  return(
     <div className="data-bar">
-      <span>💾 Backup dati:</span>
-      <button className="btn" style={{fontSize:11}} onClick={exportAll}>⬇ Esporta JSON</button>
-      <button className="btn" style={{fontSize:11}} onClick={()=>fileRef.current.click()}>⬆ Importa JSON</button>
-      <input ref={fileRef} type="file" accept=".json" style={{display:"none"}} onChange={importAll}/>
-      <span style={{marginLeft:"auto",opacity:.7}}>I dati sono salvati nel browser locale</span>
+      <span>💾 Backup:</span>
+      <button className="btn" style={{fontSize:11}} onClick={exp}>⬇ Esporta JSON</button>
+      <button className="btn" style={{fontSize:11}} onClick={()=>ref.current.click()}>⬆ Importa JSON</button>
+      <input ref={ref} type="file" accept=".json" style={{display:"none"}} onChange={imp}/>
+      <span style={{marginLeft:"auto",opacity:.7}}>Dati salvati nel browser locale</span>
     </div>
   );
 }
 
-// ── App root ─────────────────────────────────────────────────────────────────
+// ── App ──────────────────────────────────────────────────────────────────────
 function App() {
-  const [tab, setTab] = useState("pgs");
-  const [pgs, setPgsRaw] = useState(()=>LS.get("egemonia:pgs",[]));
-  const [lore, setLoreRaw] = useState(()=>LS.get("egemonia:lore",[]));
-  const [cronache, setCronacheRaw] = useState(()=>LS.get("egemonia:cronache",[]));
-
-  const setPgs = v => { setPgsRaw(v); LS.set("egemonia:pgs",v); };
-  const setLore = v => { setLoreRaw(v); LS.set("egemonia:lore",v); };
-  const setCronache = v => { setCronacheRaw(v); LS.set("egemonia:cronache",v); };
-
-  const onImport = data => {
-    if(data.pgs) setPgs(data.pgs);
-    if(data.lore) setLore(data.lore);
-    if(data.cronache) setCronache(data.cronache);
-  };
-
-  const TABS = [
-    {id:"mappa",label:"🗺️ Mappa"},
-    {id:"pgs",label:"⚔️ Personaggi"},
-    {id:"lore",label:"📜 Lore"},
-    {id:"cronache",label:"📖 Cronache"},
-  ];
-
-  return (
+  const [user,setUser]=useState(()=>LS.get("egemonia:session",null));
+  const [tab,setTab]=useState("pgs");
+  const [pgs,setPgsR]=useState(()=>LS.get("egemonia:pgs",[]));
+  const [lore,setLoreR]=useState(()=>LS.get("egemonia:lore",[]));
+  const [cronache,setCronR]=useState(()=>LS.get("egemonia:cronache",[]));
+  const setPgs=v=>{setPgsR(v);LS.set("egemonia:pgs",v);};
+  const setLore=v=>{setLoreR(v);LS.set("egemonia:lore",v);};
+  const setCronache=v=>{setCronR(v);LS.set("egemonia:cronache",v);};
+  const onImport=d=>{if(d.pgs)setPgs(d.pgs);if(d.lore)setLore(d.lore);if(d.cronache)setCronache(d.cronache);};
+  const login=u=>{setUser(u);LS.set("egemonia:session",u);};
+  const logout=()=>{setUser(null);LS.set("egemonia:session",null);};
+  if(!user)return <LoginScreen onLogin={login}/>;
+  const isMaster=user.role==="master";
+  const TABS=[{id:"mappa",l:"🗺️ Mappa"},{id:"pgs",l:"⚔️ Personaggi"},{id:"lore",l:"📜 Lore"},{id:"cronache",l:"📖 Cronache"}];
+  return(
     <div>
       <div className="hdr">
         <div className="hdr-inner">
-          <div className="hdr-brand">
-            <div>
-              <div className="hdr-title">⚔ EGEMONIA</div>
-              <div className="hdr-sub">Portale della Campagna · D&D 2024 · {pgs.length} PG · {cronache.length} sessioni</div>
-            </div>
+          <div className="hdr-brand"><div><div className="hdr-title">⚔ EGEMONIA</div><div className="hdr-sub">D&D 2024 · {pgs.length} PG · {cronache.length} sessioni</div></div></div>
+          {TABS.map(t=><button key={t.id} className={`tab${tab===t.id?" active":""}`} onClick={()=>setTab(t.id)}>{t.l}</button>)}
+          <div className="hdr-role">
+            <span className={`badge ${isMaster?"badge-master":"badge-player"}`}>{isMaster?"⚔ Master":"🎲 "+user.name}</span>
+            <button className="btn btn-ghost" style={{fontSize:11}} onClick={logout}>Esci</button>
           </div>
-          {TABS.map(t=><button key={t.id} className={`tab${tab===t.id?" active":""}`} onClick={()=>setTab(t.id)}>{t.label}</button>)}
         </div>
       </div>
       <div className="content">
-        <DataBar pgs={pgs} lore={lore} cronache={cronache} onImport={onImport}/>
-        {tab==="mappa" && <MappaTab/>}
-        {tab==="pgs" && <PersonaggiTab pgs={pgs} setPgs={setPgs}/>}
-        {tab==="lore" && <LoreTab lore={lore} setLore={setLore}/>}
-        {tab==="cronache" && <CronicheTab cronache={cronache} setCronache={setCronache}/>}
+        {isMaster&&<DataBar pgs={pgs} lore={lore} cronache={cronache} onImport={onImport}/>}
+        {tab==="mappa"&&<MappaTab/>}
+        {tab==="pgs"&&<PersonaggiTab pgs={pgs} setPgs={setPgs} user={user}/>}
+        {tab==="lore"&&<LoreTab lore={lore} setLore={setLore} user={user}/>}
+        {tab==="cronache"&&<CronicheTab cronache={cronache} setCronache={setCronache} user={user}/>}
       </div>
     </div>
   );
 }
-
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
