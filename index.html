@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Egemonia — Portale della Campagna</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #F9F6F0; --bg2: #F0EBE1; --bg3: #E8E0D0;
+      --text: #1C1008; --text2: #6B5B45; --text3: #9E8870;
+      --border: #D4C4A8; --border2: #C4B090;
+      --accent: #B45309; --accent2: #92400E;
+      --radius: 10px; --radius-sm: 6px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Crimson Text', Georgia, serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── Header ── */
+    .hdr { background: var(--text); padding: 0 1.5rem; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 12px rgba(0,0,0,.3); }
+    .hdr-inner { display: flex; align-items: stretch; gap: 0; }
+    .hdr-brand { display: flex; align-items: center; gap: 10px; padding: 0 1.5rem 0 0; border-right: 1px solid #ffffff18; margin-right: 1rem; }
+    .hdr-title { font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700; color: #F59E0B; letter-spacing: .08em; }
+    .hdr-sub { font-size: 11px; color: #9E8870; font-family: sans-serif; }
+    .tab { padding: 0 16px; height: 56px; display: flex; align-items: center; font-family: 'Cinzel', serif; font-size: 12px; font-weight: 600; letter-spacing: .06em; border: none; background: none; cursor: pointer; color: #9E8870; border-bottom: 3px solid transparent; transition: all .15s; white-space: nowrap; }
+    .tab:hover { color: #F59E0B; }
+    .tab.active { color: #F59E0B; border-bottom-color: #F59E0B; }
+    .content { padding: 1.5rem; max-width: 1200px; margin: 0 auto; }
+
+    /* ── Cards ── */
+    .card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; }
+    .card-amber { background: #FFFBF2; border: 1px solid #F59E0B55; border-radius: var(--radius); padding: 1rem 1.25rem; }
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+
+    /* ── Buttons ── */
+    .btn { padding: 6px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: white; cursor: pointer; font-size: 12px; font-family: sans-serif; color: var(--text); transition: all .12s; }
+    .btn:hover { background: var(--bg2); border-color: var(--border2); }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent2); }
+    .btn-danger { color: #DC2626; border-color: #DC262644; }
+    .btn-danger:hover { background: #FEE2E2; }
+
+    /* ── Inputs ── */
+    .input { width: 100%; padding: 6px 9px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: white; color: var(--text); font-size: 13px; font-family: sans-serif; }
+    .input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px #B4530918; }
+    textarea.input { resize: vertical; min-height: 72px; }
+    .select { width: 100%; padding: 6px 9px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: white; color: var(--text); font-size: 13px; font-family: sans-serif; cursor: pointer; }
+    .select:focus { outline: none; border-color: var(--accent); }
+    .label { font-size: 11px; font-family: sans-serif; color: var(--text2); margin-bottom: 3px; display: block; }
+
+    /* ── Badges ── */
+    .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-family: sans-serif; }
+    .badge-amber { background: #FEF3C7; color: #92400E; }
+    .badge-teal { background: #CCFBF1; color: #134E4A; }
+    .badge-gray { background: var(--bg2); color: var(--text2); }
+    .badge-red { background: #FEE2E2; color: #7F1D1D; }
+    .badge-green { background: #D1FAE5; color: #064E3B; }
+    .tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 99px; background: var(--bg2); color: var(--text2); margin: 2px; font-family: sans-serif; }
+
+    /* ── Section labels ── */
+    .section-lbl { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 700; letter-spacing: .1em; color: var(--accent); text-transform: uppercase; margin-bottom: 6px; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: .75rem 0; }
+
+    /* ── HP bar ── */
+    .hp-bar { height: 5px; border-radius: 99px; background: var(--bg3); overflow: hidden; margin: 3px 0; }
+    .hp-fill { height: 100%; border-radius: 99px; transition: width .3s; }
+
+    /* ── Skill / Prof dots ── */
+    .skill-row { display: flex; align-items: center; gap: 6px; padding: 2px 0; font-size: 12px; font-family: sans-serif; }
+    .skill-val { font-weight: 600; width: 26px; text-align: right; color: var(--accent); font-size: 12px; }
+    .prof-dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--border2); cursor: pointer; flex-shrink: 0; transition: all .12s; background: transparent; }
+    .prof-dot.prof { background: var(--accent); border-color: var(--accent); }
+    .prof-dot.exp { background: #1D9E75; border-color: #1D9E75; }
+    .death-dot { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--border); cursor: pointer; flex-shrink: 0; transition: all .12s; }
+    .death-dot.suc { background: #16A34A; border-color: #16A34A; }
+    .death-dot.fail { background: #DC2626; border-color: #DC2626; }
+    .insp-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; background: transparent; transition: all .15s; }
+    .insp-btn.on { background: #FEF3C7; border-color: var(--accent); }
+
+    /* ── Coins ── */
+    .coin-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .coin-box { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .coin-lbl { font-size: 10px; font-family: sans-serif; font-weight: 700; }
+
+    /* ── Modal ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 1rem; }
+    .modal { background: white; border-radius: var(--radius); border: 1px solid var(--border); padding: 1.5rem; max-width: 700px; width: 100%; max-height: 92vh; overflow-y: auto; }
+    .modal-title { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 700; color: var(--accent); margin-bottom: 1rem; }
+
+    /* ── Inner tabs (sheet) ── */
+    .tabs-inner { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 1rem; overflow-x: auto; }
+    .tab-inner { padding: 7px 13px; font-size: 12px; font-family: sans-serif; border: none; background: none; cursor: pointer; color: var(--text2); border-bottom: 2px solid transparent; white-space: nowrap; }
+    .tab-inner.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Timeline ── */
+    .timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); margin-top: 4px; flex-shrink: 0; }
+
+    /* ── Map ── */
+    .map-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg2); border: 2px dashed var(--border2); border-radius: var(--radius); min-height: 320px; gap: 1rem; padding: 2rem; text-align: center; }
+
+    /* ── Empty state ── */
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text2); font-family: sans-serif; }
+
+    /* ── Import/Export bar ── */
+    .data-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 1rem; font-size: 12px; font-family: sans-serif; color: var(--text2); }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+// ── Constants ────────────────────────────────────────────────────────────────
+const CAMPAIGN = "Egemonia";
+const ABILITY_KEYS = ["FOR","DES","COS","INT","SAG","CAR"];
+const ABILITY_FULL = { FOR:"Forza", DES:"Destrezza", COS:"Costituzione", INT:"Intelligenza", SAG:"Saggezza", CAR:"Carisma" };
+const SKILLS = [
+  {name:"Acrobazia",ability:"DES"},{name:"Addestrare Animali",ability:"SAG"},
+  {name:"Arcano",ability:"INT"},{name:"Atletica",ability:"FOR"},
+  {name:"Furtività",ability:"DES"},{name:"Historia",ability:"INT"},
+  {name:"Inganno",ability:"CAR"},{name:"Indagare",ability:"INT"},
+  {name:"Intimidazione",ability:"CAR"},{name:"Intuizione",ability:"SAG"},
+  {name:"Medicina",ability:"SAG"},{name:"Natura",ability:"INT"},
+  {name:"Percezione",ability:"SAG"},{name:"Persuasione",ability:"CAR"},
+  {name:"Prestidigitazione",ability:"DES"},{name:"Religione",ability:"INT"},
+  {name:"Rappresentazione",ability:"CAR"},{name:"Sopravvivenza",ability:"SAG"},
+];
+const CLASSI = ["Barbaro","Bardo","Chierico","Druido","Guerriero","Ladro","Mago","Monaco","Paladino","Ranger","Stregone","Warlock"];
+const SPECIES = ["Aasimar","Dragonide","Elfo","Gnomo","Goliath","Halfling","Nano","Orco","Tiefling","Umano"];
+const BACKGROUNDS = ["Accolito","Artigiano","Contadino","Criminale","Eremita","Guida","Intrattenitore","Marinaio","Mercante","Nobile","Saggio","Scriba","Soldato","Vagabondo","Vigilante"];
+const ALLINEAMENTI = ["Legale Buono","Neutrale Buono","Caotico Buono","Legale Neutrale","Neutrale","Caotico Neutrale","Legale Malvagio","Neutrale Malvagio","Caotico Malvagio"];
+const LORE_CATS = ["Luoghi","Fazioni","Personaggi","Storia","Magia","Creature","Oggetti"];
+const CAT_BADGE = { Luoghi:"badge-teal",Fazioni:"badge-amber",Personaggi:"badge-gray",Storia:"badge-gray",Magia:"badge-amber",Creature:"badge-red",Oggetti:"badge-teal" };
+
+const pb = lvl => 2 + Math.floor((lvl - 1) / 4);
+const mod = v => Math.floor((v - 10) / 2);
+const modStr = v => { const m = mod(v); return (m >= 0 ? "+" : "") + m; };
+const skillBonus = (val, prof, exp, pbv) => {
+  const b = exp ? pbv*2 : prof ? pbv : 0;
+  const m = mod(val) + b;
+  return (m >= 0 ? "+" : "") + m;
+};
+
+function blankPG() {
+  return {
+    id: Date.now() + Math.random(),
+    nome:"", classe:"Guerriero", sottoClasse:"", species:"Umano",
+    background:"Soldato", allineamento:"Neutrale", livello:1,
+    giocatore:"", master:"",
+    hp:10, hpMax:10, hpTemp:0, ca:10, iniziativa:0, velocita:9,
+    stats:{FOR:10,DES:10,COS:10,INT:10,SAG:10,CAR:10},
+    savingProf:{FOR:false,DES:false,COS:false,INT:false,SAG:false,CAR:false},
+    skillProf:{},
+    monete:{rame:0,argento:0,elettro:0,oro:0,platino:0},
+    heroicInspiration:false,
+    deathSaves:{success:0,fail:0},
+    traits:"", ideals:"", bonds:"", flaws:"",
+    features:"", attacks:"", equipment:"",
+    spellcastingAbility:"", spellSlots:{1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0}, spells:"",
+    note:"",
+  };
+}
+
+// ── localStorage helpers ─────────────────────────────────────────────────────
+const LS = {
+  get: (k, def) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch { return def; } },
+  set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+};
+
+// ── Character Sheet ──────────────────────────────────────────────────────────
+function CharacterSheet({ pg, onSave, onClose, onDelete }) {
+  const [p, setP] = useState({...pg});
+  const [tab, setTab] = useState("base");
+  const pbv = pb(p.livello);
+
+  const up = (k,v) => setP(prev => ({...prev, [k]:v}));
+  const upStat = (k,v) => setP(prev => ({...prev, stats:{...prev.stats,[k]:parseInt(v)||10}}));
+  const upSaveProf = k => setP(prev => ({...prev, savingProf:{...prev.savingProf,[k]:!prev.savingProf[k]}}));
+  const upSkill = name => setP(prev => {
+    const cur = prev.skillProf[name]||false;
+    const nxt = cur===false?"prof":cur==="prof"?"exp":false;
+    return {...prev, skillProf:{...prev.skillProf,[name]:nxt}};
+  });
+  const upCoin = (k,v) => setP(prev => ({...prev, monete:{...prev.monete,[k]:parseInt(v)||0}}));
+  const upDeath = (type,idx) => setP(prev => ({...prev, deathSaves:{...prev.deathSaves,[type]:prev.deathSaves[type]===idx?idx-1:idx}}));
+
+  const TABS_SHEET = [
+    {id:"base",label:"Base"},{id:"combat",label:"Combattimento"},
+    {id:"skills",label:"Abilità"},{id:"features",label:"Abilità Speciali"},
+    {id:"spells",label:"Magia"},{id:"equipment",label:"Equipaggiamento"},
+    {id:"notes",label:"Note Sessione"},
+  ];
+
+  return (
+    <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="modal">
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:"1rem",gap:8}}>
+          <div>
+            <div className="modal-title" style={{marginBottom:2}}>{p.nome||"Nuovo Personaggio"}</div>
+            <div style={{fontSize:12,fontFamily:"sans-serif",color:"var(--text2)"}}>
+              {p.species} · {p.classe}{p.sottoClasse?` (${p.sottoClasse})`:""} · Lv.{p.livello} · PB +{pbv}
+            </div>
+          </div>
+          <div style={{display:"flex",gap:6,flexShrink:0}}>
+            <button className="btn btn-danger" onClick={()=>{ if(confirm("Eliminare questo PG?")) onDelete(p.id); }}>Elimina</button>
+            <button className="btn" onClick={onClose}>Annulla</button>
+            <button className="btn btn-primary" onClick={()=>onSave(p)}>Salva</button>
+          </div>
+        </div>
+
+        <div className="tabs-inner">
+          {TABS_SHEET.map(t=><button key={t.id} className={`tab-inner${tab===t.id?" active":""}`} onClick={()=>setTab(t.id)}>{t.label}</button>)}
+        </div>
+
+        {/* BASE */}
+        {tab==="base" && (
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <div><label className="label">Nome personaggio</label><input className="input" value={p.nome} onChange={e=>up("nome",e.target.value)}/></div>
+              <div><label className="label">Giocatore</label><input className="input" value={p.giocatore} onChange={e=>up("giocatore",e.target.value)}/></div>
+              <div><label className="label">Classe</label><select className="select" value={p.classe} onChange={e=>up("classe",e.target.value)}>{CLASSI.map(c=><option key={c}>{c}</option>)}</select></div>
+              <div><label className="label">Sottoclasse</label><input className="input" value={p.sottoClasse} onChange={e=>up("sottoClasse",e.target.value)} placeholder="Es. Evocatore, Campione..."/></div>
+              <div><label className="label">Species (2024)</label><select className="select" value={p.species} onChange={e=>up("species",e.target.value)}>{SPECIES.map(s=><option key={s}>{s}</option>)}</select></div>
+              <div><label className="label">Background</label><select className="select" value={p.background} onChange={e=>up("background",e.target.value)}>{BACKGROUNDS.map(b=><option key={b}>{b}</option>)}</select></div>
+              <div><label className="label">Livello</label><input className="input" type="number" min={1} max={20} value={p.livello} onChange={e=>up("livello",parseInt(e.target.value)||1)}/></div>
+              <div><label className="label">Allineamento</label><select className="select" value={p.allineamento} onChange={e=>up("allineamento",e.target.value)}>{ALLINEAMENTI.map(a=><option key={a}>{a}</option>)}</select></div>
+              <div><label className="label">Master di riferimento</label><input className="input" value={p.master} onChange={e=>up("master",e.target.value)}/></div>
+            </div>
+            <div>
+              <div className="section-lbl" style={{marginTop:8}}>Punteggi di Caratteristica</div>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:8}}>
+                {ABILITY_KEYS.map(k=>(
+                  <div key={k} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
+                    <div style={{fontSize:9,fontFamily:"'Cinzel',serif",fontWeight:700,color:"var(--accent)",letterSpacing:".08em"}}>{k}</div>
+                    <input className="input" type="number" min={1} max={30} value={p.stats[k]} onChange={e=>upStat(k,e.target.value)} style={{textAlign:"center",padding:"4px 2px",fontWeight:700,fontSize:18}}/>
+                    <div style={{fontSize:12,fontWeight:600,color:"var(--accent)",fontFamily:"sans-serif"}}>{modStr(p.stats[k])}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <div><label className="label">Tratti della personalità</label><textarea className="input" value={p.traits} onChange={e=>up("traits",e.target.value)} style={{minHeight:54}}/></div>
+              <div><label className="label">Ideali</label><textarea className="input" value={p.ideals} onChange={e=>up("ideals",e.target.value)} style={{minHeight:54}}/></div>
+              <div><label className="label">Legami</label><textarea className="input" value={p.bonds} onChange={e=>up("bonds",e.target.value)} style={{minHeight:54}}/></div>
+              <div><label className="label">Difetti</label><textarea className="input" value={p.flaws} onChange={e=>up("flaws",e.target.value)} style={{minHeight:54}}/></div>
+            </div>
+          </div>
+        )}
+
+        {/* COMBAT */}
+        {tab==="combat" && (
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8}}>
+              {[["hp","HP Attuali"],["hpMax","HP Massimi"],["hpTemp","HP Temporanei"],["ca","Classe Armatura"],["iniziativa","Iniziativa"],["velocita","Velocità (m)"]].map(([k,l])=>(
+                <div key={k}>
+                  <label className="label">{l}</label>
+                  <input className="input" type="number" value={p[k]} onChange={e=>up(k,parseInt(e.target.value)||0)} style={{textAlign:"center",fontWeight:700,fontSize:18}}/>
+                </div>
+              ))}
+            </div>
+            <div>
+              <div className="section-lbl">Tiri Salvezza <span style={{fontWeight:400,textTransform:"none",fontSize:10}}>(● = competenza)</span></div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:4}}>
+                {ABILITY_KEYS.map(k=>(
+                  <div key={k} className="skill-row">
+                    <div className={`prof-dot${p.savingProf[k]?" prof":""}`} onClick={()=>upSaveProf(k)}/>
+                    <span className="skill-val">{skillBonus(p.stats[k],p.savingProf[k],false,pbv)}</span>
+                    <span>{ABILITY_FULL[k]}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="section-lbl">Tiri Salvezza Morte</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+                <div>
+                  <div style={{fontSize:11,fontFamily:"sans-serif",color:"#16A34A",marginBottom:4}}>Successi</div>
+                  <div style={{display:"flex",gap:6}}>{[1,2,3].map(i=><div key={i} className={`death-dot${p.deathSaves.success>=i?" suc":""}`} onClick={()=>upDeath("success",i)}/>)}</div>
+                </div>
+                <div>
+                  <div style={{fontSize:11,fontFamily:"sans-serif",color:"#DC2626",marginBottom:4}}>Fallimenti</div>
+                  <div style={{display:"flex",gap:6}}>{[1,2,3].map(i=><div key={i} className={`death-dot${p.deathSaves.fail>=i?" fail":""}`} onClick={()=>upDeath("fail",i)}/>)}</div>
+                </div>
+              </div>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:10}}>
+              <button className={`insp-btn${p.heroicInspiration?" on":""}`} onClick={()=>up("heroicInspiration",!p.heroicInspiration)}>✦</button>
+              <span style={{fontSize:13,fontFamily:"sans-serif"}}>Ispirazione Eroica {p.heroicInspiration?<span className="badge badge-amber">ATTIVA</span>:<span className="badge badge-gray">inattiva</span>}</span>
+            </div>
+          </div>
+        )}
+
+        {/* SKILLS */}
+        {tab==="skills" && (
+          <div>
+            <div style={{fontSize:11,fontFamily:"sans-serif",color:"var(--text2)",marginBottom:8}}>
+              Clicca il cerchio: <span style={{color:"var(--accent)"}}>●</span> Competenza · <span style={{color:"#1D9E75"}}>●</span> Expertise · ○ Nessuna
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:1}}>
+              {SKILLS.map(s=>{
+                const prof=p.skillProf[s.name]||false;
+                const val=mod(p.stats[s.ability])+(prof==="exp"?pbv*2:prof==="prof"?pbv:0);
+                return (
+                  <div key={s.name} className="skill-row" style={{padding:"3px 4px"}}>
+                    <div className={`prof-dot${prof==="prof"?" prof":prof==="exp"?" exp":""}`} onClick={()=>upSkill(s.name)}/>
+                    <span className="skill-val">{(val>=0?"+":"")+val}</span>
+                    <span style={{flex:1}}>{s.name}</span>
+                    <span style={{fontSize:10,color:"var(--text3)"}}>{s.ability}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="divider"/>
+            <div className="skill-row">
+              <span style={{color:"var(--text2)"}}>Percezione Passiva:</span>
+              <span style={{fontWeight:700,color:"var(--accent)",marginLeft:6,fontSize:14}}>
+                {10+mod(p.stats.SAG)+(p.skillProf["Percezione"]==="exp"?pbv*2:p.skillProf["Percezione"]==="prof"?pbv:0)}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* FEATURES */}
+        {tab==="features" && (
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            <div><label className="label">Abilità, Tratti e Caratteristiche di Classe/Species</label><textarea className="input" style={{minHeight:130}} value={p.features} onChange={e=>up("features",e.target.value)} placeholder="Es. Surge d'Azione, Secondo Soffio, Capacità Divina..."/></div>
+            <div><label className="label">Attacchi e Azioni (una per riga)</label><textarea className="input" style={{minHeight:100}} value={p.attacks} onChange={e=>up("attacks",e.target.value)} placeholder="Es. Spada Lunga: +5 colpire, 1d8+3 taglio (Mastery: Sap)"/></div>
+          </div>
+        )}
+
+        {/* SPELLS */}
+        {tab==="spells" && (
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
+              <div>
+                <label className="label">Caratteristica Incantesimi</label>
+                <select className="select" value={p.spellcastingAbility} onChange={e=>up("spellcastingAbility",e.target.value)}>
+                  <option value="">—</option>{ABILITY_KEYS.map(k=><option key={k}>{k}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="label">CD Tiro Salvezza</label>
+                <input className="input" type="number" value={p.spellSaveDC||(p.spellcastingAbility?8+pbv+mod(p.stats[p.spellcastingAbility]||10):0)} onChange={e=>up("spellSaveDC",e.target.value)} style={{textAlign:"center",fontWeight:700}}/>
+              </div>
+              <div>
+                <label className="label">Bonus Attacco Incant.</label>
+                <input className="input" type="number" value={p.spellAttackBonus||(p.spellcastingAbility?pbv+mod(p.stats[p.spellcastingAbility]||10):0)} onChange={e=>up("spellAttackBonus",e.target.value)} style={{textAlign:"center",fontWeight:700}}/>
+              </div>
+            </div>
+            <div>
+              <div className="section-lbl">Slot Incantesimo</div>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(9,1fr)",gap:4}}>
+                {[1,2,3,4,5,6,7,8,9].map(l=>(
+                  <div key={l} style={{textAlign:"center"}}>
+                    <div style={{fontSize:10,fontFamily:"sans-serif",color:"var(--text2)"}}>Lv{l}</div>
+                    <input className="input" type="number" min={0} max={9} value={p.spellSlots[l]||0} onChange={e=>setP(prev=>({...prev,spellSlots:{...prev.spellSlots,[l]:parseInt(e.target.value)||0}}))} style={{textAlign:"center",padding:"3px 2px",fontSize:14,fontWeight:700}}/>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div><label className="label">Elenco Incantesimi</label><textarea className="input" style={{minHeight:140}} value={p.spells} onChange={e=>up("spells",e.target.value)} placeholder={"Trucchetti: Dardo Magico, Raggio di Gelo\nLiv 1 (4): Mano Bruciante, Scudo, Sonno\nLiv 2 (3): Invisibilità..."}/></div>
+          </div>
+        )}
+
+        {/* EQUIPMENT */}
+        {tab==="equipment" && (
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            <div>
+              <div className="section-lbl">Monete</div>
+              <div className="coin-row">
+                {[["rame","#92400E","RP"],["argento","#6B7280","AR"],["elettro","#B45309","EL"],["oro","#D97706","ORO"],["platino","#9333EA","PL"]].map(([k,col,lbl])=>(
+                  <div key={k} className="coin-box">
+                    <span className="coin-lbl" style={{color:col}}>{lbl}</span>
+                    <input className="input" type="number" min={0} value={p.monete[k]||0} onChange={e=>upCoin(k,e.target.value)} style={{textAlign:"center",fontWeight:700,padding:"4px 2px"}}/>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div><label className="label">Equipaggiamento e Oggetti</label><textarea className="input" style={{minHeight:150}} value={p.equipment} onChange={e=>up("equipment",e.target.value)} placeholder="Armi, armatura, oggetti magici, kit, consumabili..."/></div>
+          </div>
+        )}
+
+        {/* NOTES */}
+        {tab==="notes" && (
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            <div><label className="label">Azioni tra le sessioni / Obiettivi attuali</label><textarea className="input" style={{minHeight:110}} value={p.note} onChange={e=>up("note",e.target.value)} placeholder="Cosa sta facendo il personaggio tra una sessione e l'altra?"/></div>
+            <div style={{fontSize:12,fontFamily:"sans-serif",color:"var(--text2)",padding:"8px 10px",background:"#FEF3C7",borderRadius:"var(--radius-sm)",borderLeft:"3px solid var(--accent)"}}>
+              💡 Questa sezione è visibile ai master. Usala per comunicare le intenzioni del tuo personaggio tra le sessioni!
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── PG Card ──────────────────────────────────────────────────────────────────
+function PGCard({ pg, onEdit }) {
+  const pbv = pb(pg.livello);
+  const hpPct = Math.max(0, Math.min(100, (pg.hp/pg.hpMax)*100));
+  const hpColor = hpPct>60?"#16A34A":hpPct>25?"#D97706":"#DC2626";
+  return (
+    <div className="card-amber" style={{cursor:"pointer"}} onClick={()=>onEdit(pg)}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6}}>
+        <div>
+          <div style={{fontFamily:"'Cinzel',serif",fontSize:15,fontWeight:700,color:"var(--text)"}}>{pg.nome||"PG senza nome"}</div>
+          <div style={{fontSize:12,fontFamily:"sans-serif",color:"var(--text2)"}}>{pg.species} · {pg.classe}{pg.sottoClasse?` (${pg.sottoClasse})`:""} · Lv.{pg.livello}</div>
+        </div>
+        <div style={{textAlign:"right",flexShrink:0}}>
+          <div style={{fontSize:12,fontFamily:"sans-serif",color:"#92400E",fontWeight:700}}>🪙 {pg.monete?.oro||0} go</div>
+          <div style={{fontSize:11,fontFamily:"sans-serif",color:"var(--text2)"}}>CA {pg.ca} · PB +{pbv}</div>
+          {pg.heroicInspiration&&<span className="badge badge-amber" style={{marginTop:2}}>✦ Ispirazione</span>}
+        </div>
+      </div>
+      <div style={{marginBottom:6}}>
+        <div style={{display:"flex",justifyContent:"space-between",fontSize:11,fontFamily:"sans-serif",color:"var(--text2)",marginBottom:2}}>
+          <span>HP {pg.hp}/{pg.hpMax}{pg.hpTemp>0?` (+${pg.hpTemp})`:""}</span>
+          <span style={{color:hpColor,fontWeight:600}}>{Math.round(hpPct)}%</span>
+        </div>
+        <div className="hp-bar"><div className="hp-fill" style={{width:`${hpPct}%`,background:hpColor}}/></div>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:4,margin:"8px 0"}}>
+        {ABILITY_KEYS.map(k=>(
+          <div key={k} style={{textAlign:"center",background:"white",borderRadius:4,padding:"4px 2px",border:"1px solid var(--border)"}}>
+            <div style={{fontSize:9,fontFamily:"'Cinzel',serif",fontWeight:700,color:"var(--text2)"}}>{k}</div>
+            <div style={{fontSize:16,fontWeight:700,color:"var(--text)",fontFamily:"sans-serif"}}>{pg.stats[k]}</div>
+            <div style={{fontSize:10,fontWeight:600,color:"var(--accent)",fontFamily:"sans-serif"}}>{modStr(pg.stats[k])}</div>
+          </div>
+        ))}
+      </div>
+      <div className="divider"/>
+      <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:4,fontSize:12,fontFamily:"sans-serif",color:"var(--text2)"}}>
+        <span className="badge badge-amber">{pg.allineamento}</span>
+        <span>⚔️ {pg.master} · 🎲 {pg.giocatore}</span>
+      </div>
+      {pg.note&&<div style={{marginTop:6,fontSize:12,color:"var(--text2)",fontStyle:"italic",fontFamily:"'Crimson Text',serif",borderLeft:"2px solid #F59E0B",paddingLeft:8}}>{pg.note}</div>}
+    </div>
+  );
+}
+
+// ── Personaggi Tab ───────────────────────────────────────────────────────────
+function PersonaggiTab({ pgs, setPgs }) {
+  const [sheet, setSheet] = useState(null);
+  const [filtroMaster, setFiltroMaster] = useState("");
+  const [filtroClasse, setFiltroClasse] = useState("");
+  const masters = [...new Set(pgs.map(p=>p.master))].filter(Boolean);
+  const filtered = pgs.filter(p=>(!filtroMaster||p.master===filtroMaster)&&(!filtroClasse||p.classe===filtroClasse));
+
+  const save = pg => { setPgs(pgs.some(p=>p.id===pg.id)?pgs.map(p=>p.id===pg.id?pg:p):[...pgs,pg]); setSheet(null); };
+  const del = id => { setPgs(pgs.filter(p=>p.id!==id)); setSheet(null); };
+
+  return (
+    <div>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"1rem",flexWrap:"wrap",gap:8}}>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+          <select className="select" style={{width:"auto"}} value={filtroMaster} onChange={e=>setFiltroMaster(e.target.value)}>
+            <option value="">Tutti i master</option>{masters.map(m=><option key={m}>{m}</option>)}
+          </select>
+          <select className="select" style={{width:"auto"}} value={filtroClasse} onChange={e=>setFiltroClasse(e.target.value)}>
+            <option value="">Tutte le classi</option>{CLASSI.map(c=><option key={c}>{c}</option>)}
+          </select>
+        </div>
+        <button className="btn btn-primary" onClick={()=>setSheet(blankPG())}>+ Nuovo PG</button>
+      </div>
+      {filtered.length===0
+        ? <div className="empty-state"><div style={{fontSize:40,marginBottom:8}}>⚔️</div><div style={{marginBottom:12}}>Nessun personaggio ancora.</div><button className="btn btn-primary" onClick={()=>setSheet(blankPG())}>Aggiungi il primo PG</button></div>
+        : <div className="grid2">{filtered.map(pg=><PGCard key={pg.id} pg={pg} onEdit={setSheet}/>)}</div>
+      }
+      {sheet&&<CharacterSheet pg={sheet} onSave={save} onClose={()=>setSheet(null)} onDelete={del}/>}
+    </div>
+  );
+}
+
+// ── Lore Tab ─────────────────────────────────────────────────────────────────
+function LoreTab({ lore, setLore }) {
+  const [modal, setModal] = useState(null);
+  const [filtro, setFiltro] = useState("");
+  const [cerca, setCerca] = useState("");
+  const filtered = lore.filter(l=>(!filtro||l.categoria===filtro)&&(!cerca||l.titolo.toLowerCase().includes(cerca.toLowerCase())||l.contenuto.toLowerCase().includes(cerca.toLowerCase())));
+
+  function LoreModal({ item, onSave, onClose, onDelete }) {
+    const [form, setForm] = useState(item||{titolo:"",categoria:"Luoghi",contenuto:"",tags:[]});
+    const [tagsStr, setTagsStr] = useState((item?.tags||[]).join(", "));
+    const set=(k,v)=>setForm(f=>({...f,[k]:v}));
+    return (
+      <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+        <div className="modal">
+          <div className="modal-title">{item?"Modifica voce":"Nuova voce di Lore"}</div>
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <div><label className="label">Categoria</label><select className="select" value={form.categoria} onChange={e=>set("categoria",e.target.value)}>{LORE_CATS.map(c=><option key={c}>{c}</option>)}</select></div>
+              <div><label className="label">Titolo</label><input className="input" value={form.titolo} onChange={e=>set("titolo",e.target.value)}/></div>
+            </div>
+            <div><label className="label">Descrizione</label><textarea className="input" style={{minHeight:110}} value={form.contenuto} onChange={e=>set("contenuto",e.target.value)}/></div>
+            <div><label className="label">Tag (separati da virgola)</label><input className="input" value={tagsStr} onChange={e=>setTagsStr(e.target.value)} placeholder="Es. città, pericolo, alleato"/></div>
+            <div style={{display:"flex",gap:8,justifyContent:"flex-end"}}>
+              {item&&<button className="btn btn-danger" onClick={()=>{if(confirm("Eliminare?"))onDelete(item.id);}}>Elimina</button>}
+              <button className="btn" onClick={onClose}>Annulla</button>
+              <button className="btn btn-primary" onClick={()=>onSave({...form,tags:tagsStr.split(",").map(t=>t.trim()).filter(Boolean)})}>Salva</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const save=form=>{setLore(lore.some(l=>l.id===form.id)?lore.map(l=>l.id===form.id?form:l):[...lore,{...form,id:Date.now()}]);setModal(null);};
+  const del=id=>{setLore(lore.filter(l=>l.id!==id));setModal(null);};
+
+  return (
+    <div>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"1rem",flexWrap:"wrap",gap:8}}>
+        <div style={{display:"flex",gap:8}}>
+          <input className="input" style={{width:160}} placeholder="🔍 Cerca..." value={cerca} onChange={e=>setCerca(e.target.value)}/>
+          <select className="select" style={{width:"auto"}} value={filtro} onChange={e=>setFiltro(e.target.value)}>
+            <option value="">Tutte le categorie</option>{LORE_CATS.map(c=><option key={c}>{c}</option>)}
+          </select>
+        </div>
+        <button className="btn btn-primary" onClick={()=>setModal({})}>+ Aggiungi voce</button>
+      </div>
+      {filtered.length===0
+        ? <div className="empty-state"><div style={{fontSize:40,marginBottom:8}}>📜</div><div style={{marginBottom:12}}>Nessuna voce di lore ancora.</div><button className="btn btn-primary" onClick={()=>setModal({})}>Aggiungi la prima</button></div>
+        : <div className="grid2">{filtered.map(l=>(
+            <div key={l.id} className="card" style={{cursor:"pointer"}} onClick={()=>setModal(l)}>
+              <div style={{marginBottom:4}}><span className={`badge ${CAT_BADGE[l.categoria]||"badge-gray"}`}>{l.categoria}</span></div>
+              <div style={{fontFamily:"'Cinzel',serif",fontSize:14,fontWeight:600,color:"var(--text)",margin:"4px 0"}}>{l.titolo}</div>
+              <div style={{fontSize:13,color:"var(--text2)",lineHeight:1.65,fontFamily:"'Crimson Text',serif"}}>{l.contenuto}</div>
+              {l.tags?.length>0&&<div style={{marginTop:8}}>{l.tags.map(t=><span key={t} className="tag">{t}</span>)}</div>}
+            </div>
+          ))}</div>
+      }
+      {modal!==null&&<LoreModal item={Object.keys(modal).length?modal:null} onSave={save} onClose={()=>setModal(null)} onDelete={del}/>}
+    </div>
+  );
+}
+
+// ── Cronache Tab ─────────────────────────────────────────────────────────────
+function CronicheTab({ cronache, setCronache }) {
+  const [modal, setModal] = useState(null);
+
+  function CronicaModal({ item, onSave, onClose, onDelete }) {
+    const [form, setForm] = useState(item||{sessione:cronache.length+1,data:new Date().toISOString().split("T")[0],titolo:"",master:"",giocatori:[],riassunto:"",xp:0,loot:""});
+    const [gioStr, setGioStr] = useState((item?.giocatori||[]).join(", "));
+    const set=(k,v)=>setForm(f=>({...f,[k]:v}));
+    return (
+      <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+        <div className="modal">
+          <div className="modal-title">{item?"Modifica sessione":"Nuova sessione"}</div>
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <div><label className="label">N. sessione</label><input className="input" type="number" min={1} value={form.sessione} onChange={e=>set("sessione",parseInt(e.target.value)||1)}/></div>
+              <div><label className="label">Data</label><input className="input" type="date" value={form.data} onChange={e=>set("data",e.target.value)}/></div>
+            </div>
+            <div><label className="label">Titolo</label><input className="input" value={form.titolo} onChange={e=>set("titolo",e.target.value)} placeholder="Es. La caduta di Kharrath"/></div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <div><label className="label">Master</label><input className="input" value={form.master} onChange={e=>set("master",e.target.value)}/></div>
+              <div><label className="label">Giocatori (virgola)</label><input className="input" value={gioStr} onChange={e=>setGioStr(e.target.value)} placeholder="Marco, Sara, Giulia"/></div>
+            </div>
+            <div><label className="label">Riassunto</label><textarea className="input" style={{minHeight:90}} value={form.riassunto} onChange={e=>set("riassunto",e.target.value)}/></div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <div><label className="label">XP guadagnati</label><input className="input" type="number" min={0} value={form.xp} onChange={e=>set("xp",parseInt(e.target.value)||0)}/></div>
+              <div><label className="label">Loot / Ricompense</label><input className="input" value={form.loot} onChange={e=>set("loot",e.target.value)} placeholder="Es. 150 go, Spada +1"/></div>
+            </div>
+            <div style={{display:"flex",gap:8,justifyContent:"flex-end"}}>
+              {item&&<button className="btn btn-danger" onClick={()=>{if(confirm("Eliminare?"))onDelete(item.id);}}>Elimina</button>}
+              <button className="btn" onClick={onClose}>Annulla</button>
+              <button className="btn btn-primary" onClick={()=>onSave({...form,giocatori:gioStr.split(",").map(g=>g.trim()).filter(Boolean)})}>Salva</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const save=form=>{setCronache(cronache.some(c=>c.id===form.id)?cronache.map(c=>c.id===form.id?form:c):[...cronache,{...form,id:Date.now()}]);setModal(null);};
+  const del=id=>{setCronache(cronache.filter(c=>c.id!==id));setModal(null);};
+  const sorted=[...cronache].sort((a,b)=>b.sessione-a.sessione);
+
+  return (
+    <div>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"1.25rem"}}>
+        <div style={{fontSize:13,fontFamily:"sans-serif",color:"var(--text2)"}}>{cronache.length} sessioni · {cronache.reduce((s,c)=>s+(c.xp||0),0).toLocaleString()} XP totali</div>
+        <button className="btn btn-primary" onClick={()=>setModal({})}>+ Nuova sessione</button>
+      </div>
+      {sorted.length===0
+        ? <div className="empty-state"><div style={{fontSize:40,marginBottom:8}}>📖</div><div style={{marginBottom:12}}>Nessuna sessione ancora.</div><button className="btn btn-primary" onClick={()=>setModal({})}>Registra la prima</button></div>
+        : sorted.map((c,i)=>(
+          <div key={c.id} style={{display:"flex",gap:"1rem",marginBottom:"1.25rem"}}>
+            <div style={{display:"flex",flexDirection:"column",alignItems:"center",flexShrink:0}}>
+              <div className="timeline-dot"/>
+              {i<sorted.length-1&&<div style={{width:2,flex:1,background:"var(--border)",margin:"4px auto"}}/>}
+            </div>
+            <div className="card-amber" style={{flex:1,cursor:"pointer"}} onClick={()=>setModal(c)}>
+              <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:4,marginBottom:6}}>
+                <div><span className="badge badge-amber" style={{marginRight:6}}>Sessione {c.sessione}</span><span style={{fontSize:12,fontFamily:"sans-serif",color:"var(--text2)"}}>{new Date(c.data).toLocaleDateString("it-IT",{day:"2-digit",month:"long",year:"numeric"})}</span></div>
+                <div style={{fontSize:12,fontFamily:"sans-serif",color:"var(--accent)",fontWeight:700}}>+{c.xp} XP</div>
+              </div>
+              <div style={{fontFamily:"'Cinzel',serif",fontSize:14,fontWeight:600,color:"var(--text)",marginBottom:6}}>{c.titolo}</div>
+              <div style={{fontSize:13,color:"var(--text2)",lineHeight:1.65,fontFamily:"'Crimson Text',serif"}}>{c.riassunto}</div>
+              <div className="divider"/>
+              <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:4,fontSize:12,fontFamily:"sans-serif",color:"var(--text2)"}}>
+                <span>⚔️ {c.master} · 🎲 {c.giocatori?.join(", ")}</span>
+                {c.loot&&<span>💰 {c.loot}</span>}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+      {modal!==null&&<CronicaModal item={Object.keys(modal).length?modal:null} onSave={save} onClose={()=>setModal(null)} onDelete={del}/>}
+    </div>
+  );
+}
+
+// ── Mappa Tab ────────────────────────────────────────────────────────────────
+function MappaTab() {
+  const [mapImg, setMapImg] = useState(null);
+  const handleFile = e => {
+    const f=e.target.files[0]; if(!f) return;
+    const r=new FileReader(); r.onload=ev=>setMapImg(ev.target.result); r.readAsDataURL(f);
+  };
+  return (
+    <div>
+      {!mapImg ? (
+        <div className="map-placeholder">
+          <div style={{fontSize:56}}>🗺️</div>
+          <div style={{fontFamily:"'Cinzel',serif",fontSize:20,fontWeight:700,color:"var(--text)"}}>Mappa di Egemonia</div>
+          <div style={{fontSize:14,color:"var(--text2)",fontFamily:"sans-serif",maxWidth:320}}>Carica l'immagine della mappa. PNG, JPG o WebP. La mappa è salvata solo nel tuo browser.</div>
+          <label style={{cursor:"pointer"}}>
+            <input type="file" accept="image/*" style={{display:"none"}} onChange={handleFile}/>
+            <div className="btn btn-primary" style={{padding:"8px 20px",fontSize:14}}>Carica mappa</div>
+          </label>
+        </div>
+      ) : (
+        <div>
+          <div style={{display:"flex",justifyContent:"flex-end",marginBottom:8}}>
+            <button className="btn" onClick={()=>setMapImg(null)}>Cambia mappa</button>
+          </div>
+          <div style={{borderRadius:"var(--radius)",overflow:"hidden",border:"1px solid var(--border)",background:"#111"}}>
+            <img src={mapImg} alt="Mappa di Egemonia" style={{width:"100%",display:"block",maxHeight:560,objectFit:"contain"}}/>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Import / Export ──────────────────────────────────────────────────────────
+function DataBar({ pgs, lore, cronache, onImport }) {
+  const fileRef = useRef();
+
+  const exportAll = () => {
+    const data = JSON.stringify({ pgs, lore, cronache, exportedAt: new Date().toISOString() }, null, 2);
+    const a = document.createElement("a");
+    a.href = "data:application/json;charset=utf-8," + encodeURIComponent(data);
+    a.download = `egemonia-backup-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+  };
+
+  const importAll = e => {
+    const f = e.target.files[0]; if(!f) return;
+    const r = new FileReader();
+    r.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if(confirm("Sostituire tutti i dati attuali con quelli del backup?")) {
+          onImport(data);
+        }
+      } catch { alert("File non valido."); }
+    };
+    r.readAsText(f);
+    e.target.value = "";
+  };
+
+  return (
+    <div className="data-bar">
+      <span>💾 Backup dati:</span>
+      <button className="btn" style={{fontSize:11}} onClick={exportAll}>⬇ Esporta JSON</button>
+      <button className="btn" style={{fontSize:11}} onClick={()=>fileRef.current.click()}>⬆ Importa JSON</button>
+      <input ref={fileRef} type="file" accept=".json" style={{display:"none"}} onChange={importAll}/>
+      <span style={{marginLeft:"auto",opacity:.7}}>I dati sono salvati nel browser locale</span>
+    </div>
+  );
+}
+
+// ── App root ─────────────────────────────────────────────────────────────────
+function App() {
+  const [tab, setTab] = useState("pgs");
+  const [pgs, setPgsRaw] = useState(()=>LS.get("egemonia:pgs",[]));
+  const [lore, setLoreRaw] = useState(()=>LS.get("egemonia:lore",[]));
+  const [cronache, setCronacheRaw] = useState(()=>LS.get("egemonia:cronache",[]));
+
+  const setPgs = v => { setPgsRaw(v); LS.set("egemonia:pgs",v); };
+  const setLore = v => { setLoreRaw(v); LS.set("egemonia:lore",v); };
+  const setCronache = v => { setCronacheRaw(v); LS.set("egemonia:cronache",v); };
+
+  const onImport = data => {
+    if(data.pgs) setPgs(data.pgs);
+    if(data.lore) setLore(data.lore);
+    if(data.cronache) setCronache(data.cronache);
+  };
+
+  const TABS = [
+    {id:"mappa",label:"🗺️ Mappa"},
+    {id:"pgs",label:"⚔️ Personaggi"},
+    {id:"lore",label:"📜 Lore"},
+    {id:"cronache",label:"📖 Cronache"},
+  ];
+
+  return (
+    <div>
+      <div className="hdr">
+        <div className="hdr-inner">
+          <div className="hdr-brand">
+            <div>
+              <div className="hdr-title">⚔ EGEMONIA</div>
+              <div className="hdr-sub">Portale della Campagna · D&D 2024 · {pgs.length} PG · {cronache.length} sessioni</div>
+            </div>
+          </div>
+          {TABS.map(t=><button key={t.id} className={`tab${tab===t.id?" active":""}`} onClick={()=>setTab(t.id)}>{t.label}</button>)}
+        </div>
+      </div>
+      <div className="content">
+        <DataBar pgs={pgs} lore={lore} cronache={cronache} onImport={onImport}/>
+        {tab==="mappa" && <MappaTab/>}
+        {tab==="pgs" && <PersonaggiTab pgs={pgs} setPgs={setPgs}/>}
+        {tab==="lore" && <LoreTab lore={lore} setLore={setLore}/>}
+        {tab==="cronache" && <CronicheTab cronache={cronache} setCronache={setCronache}/>}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
